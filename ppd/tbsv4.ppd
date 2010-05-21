@@ -1,0 +1,486 @@
+*PPD-Adobe: "4.3"
+*% PPD file for BEV4 with CUPS.
+*% Created by the CUPS PPD Compiler v1.2.3.
+*% 
+*% 
+*% Copyright 2001-2006 by Easy Software Products.
+*% Copyright 2009 by S.K.E sarl Patrick Kong
+*% These coded instructions, statements, and computer programs are the
+*% property of Easy Software Products and are protected by Federal
+*% copyright law.  Distribution and use rights are outlined in the file
+*% "LICENSE.txt" which should have been included with this file.  If this
+*% file is missing or damaged please contact Easy Software Products
+*% at:
+*% 
+*% Attn: CUPS Licensing Information
+*% Easy Software Products
+*% 44141 Airport View Drive, Suite 204
+*% Hollywood, Maryland 20636 USA
+*% 
+*% Voice: (301) 373-9600
+*% EMail: cups-info@cups.org
+*% WWW: http://www.cups.org
+*% 
+*% Voice: 33(0) 474 900 153
+*% EMail: ske@orange.fr
+*% WWW: http://www.skesarl.fr
+*% 
+*FormatVersion: "4.3"
+*FileVersion: "1.3b"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "TBSV4.PPD"
+*Product: "(GNU Ghostscript)"
+*Product: "(ESP Ghostscript)"
+*Manufacturer: "Toshiba Tec"
+*ModelName: "Toshiba Tec BSV4"
+*ShortNickName: "Toshiba Tec BSV4"
+*NickName: "Toshiba Tec BSV4, 1.3b"
+*PSVersion: "(3010.000) 81501"
+*LanguageLevel: "3"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "8"
+*LandscapeOrientation: Plus90
+*TTRasterizer: Type42
+*% Driver-defined attributes...
+*cupsManualCopies: False
+*cupsVersion: 1.2
+*cupsModelNumber: 20
+*cupsManualCopies: False
+*cupsFilter: "application/vnd.cups-raster 50 rastertotec"
+*UIConstraints: *Cutter False *teCutter 1
+*UIConstraints: *teCutter 1 *Cutter False
+*UIConstraints: *Cutter False *teCutter 2
+*UIConstraints: *teCutter 2 *Cutter False
+*UIConstraints: *Cutter False *tePrintMode 3
+*UIConstraints: *tePrintMode 3 *Cutter False
+*UIConstraints: *Peel False *tePrintMode 1
+*UIConstraints: *tePrintMode 1 *Peel False
+*UIConstraints: *Peel False *tePrintMode 2
+*UIConstraints: *tePrintMode 2 *Peel False
+*UIConstraints: *tePrintMode 1 *teCutter 1
+*UIConstraints: *teCutter 1 *tePrintMode 1
+*OpenUI *PageSize/Media Size: PickOne
+*OrderDependency: 10 AnySetup *PageSize
+*DefaultPageSize: w288h424
+*PageSize w90h18/31.75 mmx6.35 mm: "<</PageSize[90 18]/ImagingBBox null>>setpagedevice"
+*PageSize w90h162/31.75 mmx57.15 mm: "<</PageSize[90 162]/ImagingBBox null>>setpagedevice"
+*PageSize w108h18/38.10 mmx6.35 mm: "<</PageSize[108 18]/ImagingBBox null>>setpagedevice"
+*PageSize w108h36/38.10 mmx12.7 mm: "<</PageSize[108 36]/ImagingBBox null>>setpagedevice"
+*PageSize w108h72/38.10 mmx25.40 mm: "<</PageSize[108 72]/ImagingBBox null>>setpagedevice"
+*PageSize w108h144/38.10 mmx50.80 mm: "<</PageSize[108 144]/ImagingBBox null>>setpagedevice"
+*PageSize w144h26/50.80 mmx0.37: "<</PageSize[144 26]/ImagingBBox null>>setpagedevice"
+*PageSize w144h36/50.80 mmx12.7 mm: "<</PageSize[144 36]/ImagingBBox null>>setpagedevice"
+*PageSize w144h72/50.80 mmx25.40 mm: "<</PageSize[144 72]/ImagingBBox null>>setpagedevice"
+*PageSize w144h90/50.80 mmx31.75 mm: "<</PageSize[144 90]/ImagingBBox null>>setpagedevice"
+*PageSize w144h288/50.80 mmx101.60 mm: "<</PageSize[144 288]/ImagingBBox null>>setpagedevice"
+*PageSize w144h396/50.80 mmx138.00 mm: "<</PageSize[144 396]/ImagingBBox null>>setpagedevice"
+*PageSize w162h36/57.15 mmx12.7 mm: "<</PageSize[162 36]/ImagingBBox null>>setpagedevice"
+*PageSize w162h90/57.15 mmx31.75 mm: "<</PageSize[162 90]/ImagingBBox null>>setpagedevice"
+*PageSize w162h288/57.15 mmx101.60 mm: "<</PageSize[162 288]/ImagingBBox null>>setpagedevice"
+*PageSize w162h396/57.15 mmx138.00 mm: "<</PageSize[162 396]/ImagingBBox null>>setpagedevice"
+*PageSize w171h396/60.45 mmx138.00 mm: "<</PageSize[171 396]/ImagingBBox null>>setpagedevice"
+*PageSize w180h72/63.50 mmx25.40 mm: "<</PageSize[180 72]/ImagingBBox null>>setpagedevice"
+*PageSize w180h144/63.50 mmx50.80 mm: "<</PageSize[180 144]/ImagingBBox null>>setpagedevice"
+*PageSize w198h90/69.85 mmx31.75 mm: "<</PageSize[198 90]/ImagingBBox null>>setpagedevice"
+*PageSize w216h72/76.20 mmx25.40 mm: "<</PageSize[216 72]/ImagingBBox null>>setpagedevice"
+*PageSize w216h90/76.20 mmx31.75 mm: "<</PageSize[216 90]/ImagingBBox null>>setpagedevice"
+*PageSize w216h144/76.20 mmx50.80 mm: "<</PageSize[216 144]/ImagingBBox null>>setpagedevice"
+*PageSize w216h216/76.20 mmx76.20 mm: "<</PageSize[216 216]/ImagingBBox null>>setpagedevice"
+*PageSize w216h360/76.20 mmx127.00 mm: "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+*PageSize w234h144/82.55 mmx50.80 mm: "<</PageSize[234 144]/ImagingBBox null>>setpagedevice"
+*PageSize w234h360/82.55 mmx127.00 mm: "<</PageSize[234 360]/ImagingBBox null>>setpagedevice"
+*PageSize w234h396/82.55 mmx138.00 mm: "<</PageSize[234 396]/ImagingBBox null>>setpagedevice"
+*PageSize w288h72/101.60 mmx25.40 mm: "<</PageSize[288 72]/ImagingBBox null>>setpagedevice"
+*PageSize w288h144/101.60 mmx50.80 mm: "<</PageSize[288 144]/ImagingBBox null>>setpagedevice"
+*PageSize w288h180/101.60 mmx63.50 mm: "<</PageSize[288 180]/ImagingBBox null>>setpagedevice"
+*PageSize w288h216/101.60 mmx76.20 mm: "<</PageSize[288 216]/ImagingBBox null>>setpagedevice"
+*PageSize w288h288/101.60 mmx101.60 mm: "<</PageSize[288 288]/ImagingBBox null>>setpagedevice"
+*PageSize w288h360/101.60 mmx127.00 mm: "<</PageSize[288 360]/ImagingBBox null>>setpagedevice"
+*PageSize w288h424/101.60 mmx150.00 mm: "<</PageSize[288 424]/ImagingBBox null>>setpagedevice"
+*PageSize w288h432/101.60 mmx152.40 mm: "<</PageSize[288 432]/ImagingBBox null>>setpagedevice"
+*PageSize w288h468/101.60 mmx165.10 mm: "<</PageSize[288 468]/ImagingBBox null>>setpagedevice"
+*PageSize w288h936/101.60 mmx176.20 mm: "<</PageSize[288 936]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageSize
+*OpenUI *PageRegion/Media Size: PickOne
+*OrderDependency: 10 AnySetup *PageRegion
+*DefaultPageRegion: w288h424
+*PageRegion w90h18/31.75 mmx6.35 mm: "<</PageSize[90 18]/ImagingBBox null>>setpagedevice"
+*PageRegion w90h162/31.75 mmx57.15 mm: "<</PageSize[90 162]/ImagingBBox null>>setpagedevice"
+*PageRegion w108h18/38.10 mmx6.35 mm: "<</PageSize[108 18]/ImagingBBox null>>setpagedevice"
+*PageRegion w108h36/38.10 mmx12.7 mm: "<</PageSize[108 36]/ImagingBBox null>>setpagedevice"
+*PageRegion w108h72/38.10 mmx25.40 mm: "<</PageSize[108 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w108h144/38.10 mmx50.80 mm: "<</PageSize[108 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h26/50.80 mmx0.37: "<</PageSize[144 26]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h36/50.80 mmx12.7 mm: "<</PageSize[144 36]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h72/50.80 mmx25.40 mm: "<</PageSize[144 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h90/50.80 mmx31.75 mm: "<</PageSize[144 90]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h288/50.80 mmx101.60 mm: "<</PageSize[144 288]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h396/50.80 mmx138.00 mm: "<</PageSize[144 396]/ImagingBBox null>>setpagedevice"
+*PageRegion w162h36/57.15 mmx12.7 mm: "<</PageSize[162 36]/ImagingBBox null>>setpagedevice"
+*PageRegion w162h90/57.15 mmx31.75 mm: "<</PageSize[162 90]/ImagingBBox null>>setpagedevice"
+*PageRegion w162h288/57.15 mmx101.60 mm: "<</PageSize[162 288]/ImagingBBox null>>setpagedevice"
+*PageRegion w162h396/57.15 mmx138.00 mm: "<</PageSize[162 396]/ImagingBBox null>>setpagedevice"
+*PageRegion w171h396/60.45 mmx138.00 mm: "<</PageSize[171 396]/ImagingBBox null>>setpagedevice"
+*PageRegion w180h72/63.50 mmx25.40 mm: "<</PageSize[180 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w180h144/63.50 mmx50.80 mm: "<</PageSize[180 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w198h90/69.85 mmx31.75 mm: "<</PageSize[198 90]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h72/76.20 mmx25.40 mm: "<</PageSize[216 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h90/76.20 mmx31.75 mm: "<</PageSize[216 90]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h144/76.20 mmx50.80 mm: "<</PageSize[216 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h216/76.20 mmx76.20 mm: "<</PageSize[216 216]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h360/76.20 mmx127.00 mm: "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+*PageRegion w234h144/82.55 mmx50.80 mm: "<</PageSize[234 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w234h360/82.55 mmx127.00 mm: "<</PageSize[234 360]/ImagingBBox null>>setpagedevice"
+*PageRegion w234h396/82.55 mmx138.00 mm: "<</PageSize[234 396]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h72/101.60 mmx25.40 mm: "<</PageSize[288 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h144/101.60 mmx50.80 mm: "<</PageSize[288 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h180/101.60 mmx63.50 mm: "<</PageSize[288 180]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h216/101.60 mmx76.20 mm: "<</PageSize[288 216]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h288/101.60 mmx101.60 mm: "<</PageSize[288 288]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h360/101.60 mmx127.00 mm: "<</PageSize[288 360]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h424/101.60 mmx150.00 mm: "<</PageSize[288 424]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h432/101.60 mmx152.40 mm: "<</PageSize[288 432]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h468/101.60 mmx165.10 mm: "<</PageSize[288 468]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h936/101.60 mmx176.20 mm: "<</PageSize[288 936]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageRegion
+*DefaultImageableArea: w288h424
+*ImageableArea w90h18/31.75 mmx6.35 mm: "0.00 0.00 90.00 18.00"
+*ImageableArea w90h162/31.75 mmx57.15 mm: "0.00 0.00 90.00 162.00"
+*ImageableArea w108h18/38.10 mmx6.35 mm: "0.00 0.00 108.00 18.00"
+*ImageableArea w108h36/38.10 mmx12.7 mm: "0.00 0.00 108.00 36.00"
+*ImageableArea w108h72/38.10 mmx25.40 mm: "0.00 0.00 108.00 72.00"
+*ImageableArea w108h144/38.10 mmx50.80 mm: "0.00 0.00 108.00 144.00"
+*ImageableArea w144h26/50.80 mmx0.37: "0.00 0.00 144.00 26.00"
+*ImageableArea w144h36/50.80 mmx12.7 mm: "0.00 0.00 144.00 36.00"
+*ImageableArea w144h72/50.80 mmx25.40 mm: "0.00 0.00 144.00 72.00"
+*ImageableArea w144h90/50.80 mmx31.75 mm: "0.00 0.00 144.00 90.00"
+*ImageableArea w144h288/50.80 mmx101.60 mm: "0.00 0.00 144.00 288.00"
+*ImageableArea w144h396/50.80 mmx138.00 mm: "0.00 0.00 144.00 396.00"
+*ImageableArea w162h36/57.15 mmx12.7 mm: "0.00 0.00 162.00 36.00"
+*ImageableArea w162h90/57.15 mmx31.75 mm: "0.00 0.00 162.00 90.00"
+*ImageableArea w162h288/57.15 mmx101.60 mm: "0.00 0.00 162.00 288.00"
+*ImageableArea w162h396/57.15 mmx138.00 mm: "0.00 0.00 162.00 396.00"
+*ImageableArea w171h396/60.45 mmx138.00 mm: "0.00 0.00 171.00 396.00"
+*ImageableArea w180h72/63.50 mmx25.40 mm: "0.00 0.00 180.00 72.00"
+*ImageableArea w180h144/63.50 mmx50.80 mm: "0.00 0.00 180.00 144.00"
+*ImageableArea w198h90/69.85 mmx31.75 mm: "0.00 0.00 198.00 90.00"
+*ImageableArea w216h72/76.20 mmx25.40 mm: "0.00 0.00 216.00 72.00"
+*ImageableArea w216h90/76.20 mmx31.75 mm: "0.00 0.00 216.00 90.00"
+*ImageableArea w216h144/76.20 mmx50.80 mm: "0.00 0.00 216.00 144.00"
+*ImageableArea w216h216/76.20 mmx76.20 mm: "0.00 0.00 216.00 216.00"
+*ImageableArea w216h360/76.20 mmx127.00 mm: "0.00 0.00 216.00 360.00"
+*ImageableArea w234h144/82.55 mmx50.80 mm: "0.00 0.00 234.00 144.00"
+*ImageableArea w234h360/82.55 mmx127.00 mm: "0.00 0.00 234.00 360.00"
+*ImageableArea w234h396/82.55 mmx138.00 mm: "0.00 0.00 234.00 396.00"
+*ImageableArea w288h72/101.60 mmx25.40 mm: "0.00 0.00 288.00 72.00"
+*ImageableArea w288h144/101.60 mmx50.80 mm: "0.00 0.00 288.00 144.00"
+*ImageableArea w288h180/101.60 mmx63.50 mm: "0.00 0.00 288.00 180.00"
+*ImageableArea w288h216/101.60 mmx76.20 mm: "0.00 0.00 288.00 216.00"
+*ImageableArea w288h288/101.60 mmx101.60 mm: "0.00 0.00 288.00 288.00"
+*ImageableArea w288h360/101.60 mmx127.00 mm: "0.00 0.00 288.00 360.00"
+*ImageableArea w288h424/101.60 mmx150.00 mm: "0.00 0.00 288.00 424.00"
+*ImageableArea w288h432/101.60 mmx152.40 mm: "0.00 0.00 288.00 432.00"
+*ImageableArea w288h468/101.60 mmx165.10 mm: "0.00 0.00 288.00 468.00"
+*ImageableArea w288h936/101.60 mmx176.20 mm: "0.00 0.00 288.00 936.00"
+*DefaultPaperDimension: w288h424
+*PaperDimension w90h18/31.75 mmx6.35 mm: "90.00 18.00"
+*PaperDimension w90h162/31.75 mmx57.15 mm: "90.00 162.00"
+*PaperDimension w108h18/38.10 mmx6.35 mm: "108.00 18.00"
+*PaperDimension w108h36/38.10 mmx12.7 mm: "108.00 36.00"
+*PaperDimension w108h72/38.10 mmx25.40 mm: "108.00 72.00"
+*PaperDimension w108h144/38.10 mmx50.80 mm: "108.00 144.00"
+*PaperDimension w144h26/50.80 mmx0.37: "144.00 26.00"
+*PaperDimension w144h36/50.80 mmx12.7 mm: "144.00 36.00"
+*PaperDimension w144h72/50.80 mmx25.40 mm: "144.00 72.00"
+*PaperDimension w144h90/50.80 mmx31.75 mm: "144.00 90.00"
+*PaperDimension w144h288/50.80 mmx101.60 mm: "144.00 288.00"
+*PaperDimension w144h396/50.80 mmx138.00 mm: "144.00 396.00"
+*PaperDimension w162h36/57.15 mmx12.7 mm: "162.00 36.00"
+*PaperDimension w162h90/57.15 mmx31.75 mm: "162.00 90.00"
+*PaperDimension w162h288/57.15 mmx101.60 mm: "162.00 288.00"
+*PaperDimension w162h396/57.15 mmx138.00 mm: "162.00 396.00"
+*PaperDimension w171h396/60.45 mmx138.00 mm: "171.00 396.00"
+*PaperDimension w180h72/63.50 mmx25.40 mm: "180.00 72.00"
+*PaperDimension w180h144/63.50 mmx50.80 mm: "180.00 144.00"
+*PaperDimension w198h90/69.85 mmx31.75 mm: "198.00 90.00"
+*PaperDimension w216h72/76.20 mmx25.40 mm: "216.00 72.00"
+*PaperDimension w216h90/76.20 mmx31.75 mm: "216.00 90.00"
+*PaperDimension w216h144/76.20 mmx50.80 mm: "216.00 144.00"
+*PaperDimension w216h216/76.20 mmx76.20 mm: "216.00 216.00"
+*PaperDimension w216h360/76.20 mmx127.00 mm: "216.00 360.00"
+*PaperDimension w234h144/82.55 mmx50.80 mm: "234.00 144.00"
+*PaperDimension w234h360/82.55 mmx127.00 mm: "234.00 360.00"
+*PaperDimension w234h396/82.55 mmx138.00 mm: "234.00 396.00"
+*PaperDimension w288h72/101.60 mmx25.40 mm: "288.00 72.00"
+*PaperDimension w288h144/101.60 mmx50.80 mm: "288.00 144.00"
+*PaperDimension w288h180/101.60 mmx63.50 mm: "288.00 180.00"
+*PaperDimension w288h216/101.60 mmx76.20 mm: "288.00 216.00"
+*PaperDimension w288h288/101.60 mmx101.60 mm: "288.00 288.00"
+*PaperDimension w288h360/101.60 mmx127.00 mm: "288.00 360.00"
+*PaperDimension w288h424/101.60 mmx150.00 mm: "288.00 424.00"
+*PaperDimension w288h432/101.60 mmx152.40 mm: "288.00 432.00"
+*PaperDimension w288h468/101.60 mmx165.10 mm: "288.00 468.00"
+*PaperDimension w288h936/101.60 mmx176.20 mm: "288.00 936.00"
+*MaxMediaWidth: "300.00"
+*MaxMediaHeight: "2830.00"
+*HWMargins: 0.00 0.00 0.00 0.00
+*CustomPageSize True: "pop pop pop <</PageSize[5 -2 roll]/ImagingBBox null>>setpagedevice"
+*ParamCustomPageSize Width: 1 points 63.00 300.00
+*ParamCustomPageSize Height: 2 points 29.00 2830.00
+*ParamCustomPageSize WidthOffset: 3 points 0 0
+*ParamCustomPageSize HeightOffset: 4 points 0 0
+*ParamCustomPageSize Orientation: 5 int 0 0
+*OpenUI *Resolution/Printer Resolution: PickOne
+*OrderDependency: 20.0 AnySetup *Resolution
+*DefaultResolution: 203dpi
+*Resolution 203dpi/TECBSV4G: "<</HWResolution[203 203]>>setpagedevice"
+*CloseUI: *Resolution
+*OpenUI *Gap/Label Gap: PickOne
+*OrderDependency: 20.0 AnySetup *Gap
+*DefaultGap: 2
+*Gap 0/0 mm : ""
+*Gap 1/1 mm : ""
+*Gap 2/2 mm : ""
+*Gap 3/3 mm : ""
+*Gap 4/4 mm : ""
+*Gap 5/5 mm : ""
+*CloseUI: *Gap
+*OpenUI *teMediaTracking/Media Detection: PickOne
+*OrderDependency: 20.0 AnySetup *teMediaTracking
+*DefaultteMediaTracking: 2
+*teMediaTracking 0/Continous: ""
+*teMediaTracking 1/Reflective: ""
+*teMediaTracking 2/Transmissive: ""
+*teMediaTracking 3/Reflective Pre-Print: ""
+*teMediaTracking 4/Transmissive Pre-Print: ""
+*CloseUI: *teMediaTracking
+*OpenUI *MediaType/Media Type: PickOne
+*OrderDependency: 20.0 AnySetup *MediaType
+*DefaultMediaType: Direct
+*MediaType Thermal/Thermal Transfer: "<</MediaType(Thermal)>>setpagedevice"
+*MediaType Direct/Direct Thermal: "<</MediaType(Direct)>>setpagedevice"
+*CloseUI: *MediaType
+*OpenUI *PrintOrient/Orientation: PickOne
+*OrderDependency: 20.0 AnySetup *PrintOrient
+*DefaultPrintOrient: 0
+*PrintOrient 0/Bottom Leading: ""
+*PrintOrient 1/Top Leading: ""
+*PrintOrient 2/Mirror Print Top Leading: ""
+*PrintOrient 3/Mirror Print Bottom Leading: ""
+*CloseUI: *PrintOrient
+*OpenGroup: InstallableOptions/Installable Options
+*OpenUI *Cutter: Boolean
+*OrderDependency: 10.0 AnySetup *Cutter
+*DefaultCutter: False
+*Cutter False/Not Installed: ""
+*Cutter True/Installed: ""
+*CloseUI: *Cutter
+*OpenUI *Peel/Peel Off: Boolean
+*OrderDependency: 10.0 AnySetup *Peel
+*DefaultPeel: False
+*Peel False/Not Installed: ""
+*Peel True/Installed: ""
+*CloseUI: *Peel
+*CloseGroup: InstallableOptions
+*OpenGroup: PrinterSettings/Printer Settings
+*OpenUI *Darkness/Temperature: PickOne
+*OrderDependency: 20.0 AnySetup *Darkness
+*DefaultDarkness: 11
+*Darkness 1/-10: "<</cupsCompression 1>>setpagedevice"
+*Darkness 2/-9: "<</cupsCompression 2>setpagedevice"
+*Darkness 3/-8: "<</cupsCompression 3>>setpagedevice"
+*Darkness 4/-7: "<</cupsCompression 4>>setpagedevice"
+*Darkness 5/-6: "<</cupsCompression 5>>setpagedevice"
+*Darkness 6/-5: "<</cupsCompression 6>>setpagedevice"
+*Darkness 7/-4: "<</cupsCompression 7>>setpagedevice"
+*Darkness 8/-3: "<</cupsCompression 8>>setpagedevice"
+*Darkness 9/-2: "<</cupsCompression 9>>setpagedevice"
+*Darkness 10/-1: "<</cupsCompression 10>>setpagedevice"
+*Darkness 11/0: "<</cupsCompression 11>>setpagedevice"
+*Darkness 12/+1: "<</cupsCompression 12>>setpagedevice"
+*Darkness 13/+2: "<</cupsCompression 13>>setpagedevice"
+*Darkness 14/+3: "<</cupsCompression 14>>setpagedevice"
+*Darkness 15/+4: "<</cupsCompression 15>>setpagedevice"
+*Darkness 16/+5: "<</cupsCompression 16>>setpagedevice"
+*Darkness 17/+6: "<</cupsCompression 17>>setpagedevice"
+*Darkness 18/+7: "<</cupsCompression 18>>setpagedevice"
+*Darkness 19/+8: "<</cupsCompression 19>>setpagedevice"
+*Darkness 20/+9: "<</cupsCompression 20>>setpagedevice"
+*Darkness 21/+10: "<</cupsCompression 21>>setpagedevice"
+*CloseUI: *Darkness
+*OpenUI *tePrintRate/Print Speed: PickOne
+*OrderDependency: 20.0 AnySetup *tePrintRate
+*DefaulttePrintRate: 4
+*tePrintRate 2/50 mm/sec.: ""
+*tePrintRate 3/76.2 mm/sec.: ""
+*tePrintRate 4/101 mm/sec.: ""
+*tePrintRate 5/127 mm/sec.: ""
+*CloseUI: *tePrintRate
+*OpenUI *tePrintMode/Print Mode: PickOne
+*OrderDependency: 20.0 AnySetup *tePrintMode
+*DefaulttePrintMode: 0
+*tePrintMode 0/Batch: ""
+*tePrintMode 1/Peel Off Cell Active: ""
+*tePrintMode 2/Peel Off Cell Not Active: ""
+*tePrintMode 3/Cutter: ""
+*CloseUI: *tePrintMode
+*OpenUI *teCutter/Cutter Option: PickOne
+*OrderDependency: 20.0 AnySetup *teCutter
+*DefaultteCutter: 0
+*teCutter 0/No Cut: "<</cupsRowStep 0>>setpagedevice"
+*teCutter 1/Cut Every Label: "<</cupsRowStep 1>>setpagedevice"
+*teCutter 2/Cut Every 2 Labels : "<</cupsRowStep 999>>setpagedevice"
+*CloseUI: *teCutter
+*CloseGroup: PrinterSettings
+*OpenGroup: AdvancedSetting/Advanced Printer Settings
+*OpenUI *teGraphicsMode/Graphic Mode: PickOne
+*OrderDependency: 20.0 AnySetup *teGraphicsMode
+*DefaultteGraphicsMode: 1
+*teGraphicsMode 1/Graphics AND Mode: ""
+*teGraphicsMode 2/Graphic OR Mode: ""
+*CloseUI: *teGraphicsMode
+*OpenUI *FAdjSgn/Feed Direction: PickOne
+*OrderDependency: 20.0 AnySetup *FAdjSgn
+*DefaultFAdjSgn: 0
+*FAdjSgn 0/+: ""
+*FAdjSgn 1/-: ""
+*CloseUI: *FAdjSgn
+*OpenUI *FAdjV/Feed Adjust Value: PickOne
+*OrderDependency: 20.0 AnySetup *FAdjV
+*DefaultFAdjV: 000
+*FAdjV 000/0.0 mm: ""
+*FAdjV 010/1.0 mm: ""
+*FAdjV 020/2.0 mm: ""
+*FAdjV 030/3.0 mm: ""
+*FAdjV 040/4.0 mm: ""
+*FAdjV 050/5.0 mm: ""
+*FAdjV 060/6.0 mm: ""
+*FAdjV 070/7.0 mm: ""
+*FAdjV 080/8.0 mm: ""
+*FAdjV 090/9.0 mm: ""
+*FAdjV 100/10.0 mm: ""
+*CloseUI: *FAdjV
+*OpenUI *CAdjSgn/Cut or Peel Adjust Direction: PickOne
+*OrderDependency: 20.0 AnySetup *CAdjSgn
+*DefaultCAdjSgn: 0
+*CAdjSgn 0/+: ""
+*CAdjSgn 1/-: ""
+*CloseUI: *CAdjSgn
+*OpenUI *CAdjV/Cut or Peel Adjust Value: PickOne
+*OrderDependency: 20.0 AnySetup *CAdjV
+*DefaultCAdjV: 000
+*CAdjV 000/0.0 mm: ""
+*CAdjV 010/1.0 mm: ""
+*CAdjV 020/2.0 mm: ""
+*CAdjV 030/3.0 mm: ""
+*CAdjV 040/4.0 mm: ""
+*CAdjV 050/5.0 mm: ""
+*CAdjV 060/6.0 mm: ""
+*CAdjV 070/7.0 mm: ""
+*CAdjV 080/8.0 mm: ""
+*CAdjV 090/9.0 mm: ""
+*CAdjV 100/10.0 mm: ""
+*CloseUI: *CAdjV
+*OpenUI *RAdjSgn/Back Feed Direction: PickOne
+*OrderDependency: 20.0 AnySetup *RAdjSgn
+*DefaultRAdjSgn: 0
+*RAdjSgn 0/+: ""
+*RAdjSgn 1/-: ""
+*CloseUI: *RAdjSgn
+*OpenUI *RAdjV/Back Feed Adjust Value: PickOne
+*OrderDependency: 20.0 AnySetup *RAdjV
+*DefaultRAdjV: 00
+*RAdjV 00/0.0 mm: ""
+*RAdjV 10/1.0 mm: ""
+*RAdjV 20/2.0 mm: ""
+*RAdjV 30/3.0 mm: ""
+*RAdjV 40/4.0 mm: ""
+*RAdjV 50/5.0 mm: ""
+*RAdjV 60/6.0 mm: ""
+*RAdjV 70/7.0 mm: ""
+*RAdjV 80/8.0 mm: ""
+*RAdjV 90/9.0 mm: ""
+*RAdjV 99/9.9 mm: ""
+*CloseUI: *RAdjV
+*OpenUI *RbnAdjFwd/Ribbon Forward Adjust: PickOne
+*OrderDependency: 20.0 AnySetup *RbnAdjFwd
+*DefaultRbnAdjFwd: -00
+*RbnAdjFwd -00/0: ""
+*RbnAdjFwd -01/-1: ""
+*RbnAdjFwd -02/-2: ""
+*RbnAdjFwd -03/-3: ""
+*RbnAdjFwd -04/-4: ""
+*RbnAdjFwd -05/-5: ""
+*RbnAdjFwd -06/-6: ""
+*RbnAdjFwd -07/-7: ""
+*RbnAdjFwd -08/-8: ""
+*RbnAdjFwd -09/-9: ""
+*RbnAdjFwd -10: ""
+*RbnAdjFwd -11: ""
+*RbnAdjFwd -12: ""
+*RbnAdjFwd -13: ""
+*RbnAdjFwd -14: ""
+*RbnAdjFwd -15: ""
+*CloseUI: *RbnAdjFwd
+*OpenUI *RbnAdjBck/Ribbon Back Adjust: PickOne
+*OrderDependency: 20.0 AnySetup *RbnAdjBck
+*DefaultRbnAdjBck: -00
+*RbnAdjBck -00/0: ""
+*RbnAdjBck -01/-1: ""
+*RbnAdjBck -02/-2: ""
+*RbnAdjBck -03/-3: ""
+*RbnAdjBck -04/-4: ""
+*RbnAdjBck -05/-5: ""
+*RbnAdjBck -06/-6: ""
+*RbnAdjBck -07/-7: ""
+*RbnAdjBck -08/-8: ""
+*RbnAdjBck -09/-9: ""
+*RbnAdjBck -10: ""
+*RbnAdjBck -11: ""
+*RbnAdjBck -12: ""
+*RbnAdjBck -13: ""
+*RbnAdjBck -14: ""
+*RbnAdjBck -15: ""
+*CloseUI: *RbnAdjBck
+*CloseGroup: AdvancedSetting
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(1.05)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(1.05)" Standard ROM
+*Font AvantGarde-Demi: Standard "(1.05)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(1.05)" Standard ROM
+*Font Bookman-Demi: Standard "(1.05)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(1.05)" Standard ROM
+*Font Bookman-Light: Standard "(1.05)" Standard ROM
+*Font Bookman-LightItalic: Standard "(1.05)" Standard ROM
+*Font Courier: Standard "(1.05)" Standard ROM
+*Font Courier-Bold: Standard "(1.05)" Standard ROM
+*Font Courier-BoldOblique: Standard "(1.05)" Standard ROM
+*Font Courier-Oblique: Standard "(1.05)" Standard ROM
+*Font Helvetica: Standard "(1.05)" Standard ROM
+*Font Helvetica-Bold: Standard "(1.05)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(1.05)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(1.05)" Standard ROM
+*Font Helvetica-Oblique: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(1.05)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(1.05)" Standard ROM
+*Font Palatino-Bold: Standard "(1.05)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(1.05)" Standard ROM
+*Font Palatino-Italic: Standard "(1.05)" Standard ROM
+*Font Palatino-Roman: Standard "(1.05)" Standard ROM
+*Font Symbol: Special "(001.005)" Special ROM
+*Font Times-Bold: Standard "(1.05)" Standard ROM
+*Font Times-BoldItalic: Standard "(1.05)" Standard ROM
+*Font Times-Italic: Standard "(1.05)" Standard ROM
+*Font Times-Roman: Standard "(1.05)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(1.05)" Standard ROM
+*Font ZapfDingbats: Special "(001.005)" Special ROM
+*Font TecRfid: special "(10.)" standard ROM
+*% End of TERBSA4.PPD, 23591 bytes.
