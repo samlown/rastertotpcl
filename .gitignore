@@ -1,2 +1,8 @@
 *.swp
 *.o
+/bin
+/ppd
+/src/rastertotec
+/src/ppd
+*.raster
+*.tpcl

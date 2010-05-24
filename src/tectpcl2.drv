@@ -1,0 +1,1432 @@
+// CUPS PPD Compiler v1.2.3
+
+// Include necessary files...
+#include <font.defs>
+#include <media.defs>
+#include <label.h>
+#include <raster.defs>
+#include "labelmedia.h"
+
+// Language Support
+#po fr "../po/fr.po" // French
+// #po be "be.po"    // Belgian
+#po de "../po/de.po" // German
+#po it "../po/it.po" // Italian
+#po es "../po/es.po" // Spanish
+
+// TECTPCL2 Label Printer
+Copyright ""
+Copyright ""
+Copyright "Copyright 2001-2006 by Easy Software Products."
+Copyright "Copyright 2009 by S.K.E sarl Patrick Kong"
+Copyright "Copyright 2010 by Sam Lown <me@samlown.com>"
+Copyright "These coded instructions, statements, and computer programs are the"
+Copyright "property of Easy Software Products and are protected by Federal"
+Copyright "copyright law.  Distribution and use rights are outlined in the file"
+Copyright "\"LICENSE.txt\" which should have been included with this file.  If this"
+Copyright "file is missing or damaged please contact Easy Software Products"
+Copyright "at:"
+Copyright ""
+Copyright "Attn: CUPS Licensing Information"
+Copyright "Easy Software Products"
+Copyright "44141 Airport View Drive, Suite 204"
+Copyright "Hollywood, Maryland 20636 USA"
+Copyright ""
+Copyright "Voice: (301) 373-9600"
+Copyright "EMail: cups-info@cups.org"
+Copyright "WWW: http://www.cups.org"
+Copyright ""
+Copyright "Voice: 33(0) 474 900 153"
+Copyright "EMail: ske@orange.fr"
+Copyright "WWW: http://www.skesarl.fr"
+Copyright "" 
+Attribute "Product" "" "(GNU Ghostscript)"
+Attribute "Product" "" "(ESP Ghostscript)"
+Attribute "cupsVersion" "" "1.2"
+Attribute "cupsManualCopies" "" "False"
+Attribute "PSVersion" "" "(3010.000) 81501"
+Attribute "LanguageLevel" "" "3"
+Attribute "FileSystem" "" "False"
+Attribute "LandscapeOrientation" "" "Plus90"
+Attribute "TTRasterizer" "" "Type42"
+Version "1.3b"
+DriverType label
+ModelNumber 0x14 
+ColorDevice No
+Throughput 8
+Manufacturer "Toshiba Tec"
+Installable "Cutter/Cutter"
+Installable "Peel/Peel Off"
+UIconstraints "*Cutter False *teCutter 1"
+UIconstraints "*Cutter False *teCutter 2"
+UIconstraints "*Cutter False *tePrintMode 3"
+UIConstraints "*Peel False *tePrintMode 1"
+UIConstraints "*Peel False *tePrintMode 2"
+UIConstraints "*tePrintMode 1 *teCutter 1"
+Font *
+// Filter provided by the driver...
+Filter application/vnd.cups-raster 50 rastertotec
+
+Group "AdvancedSetting/Advanced Printer Settings"
+  Option "teGraphicsMode/Graphics Mode" PickOne AnySetup 20.0
+    *Choice "1/TOPIX Compression" ""
+    Choice "2/Raw 8bit Graphics (overwrite)" ""
+    Choice "3/Raw 8bit Graphics (logic OR)" ""
+
+{
+
+  // printer BSA4G an BSA4T
+  {
+    ModelName "BSA4"
+    PCFileName "tecbsa4.ppd"
+    VariablePaperSize Yes
+    MinSize 63 29
+    MaxSize 300 2830
+    HWMargins 0 0 0 0
+    MediaSize w90h18
+    MediaSize w90h162
+    MediaSize w108h18
+    MediaSize w108h36
+    MediaSize w108h72
+    MediaSize w108h144
+    MediaSize w144h26
+    MediaSize w144h36
+    MediaSize w144h72
+    MediaSize w144h90
+    MediaSize w144h288
+    MediaSize w144h396
+    MediaSize w162h36
+    MediaSize w162h90
+    MediaSize w162h288
+    MediaSize w162h396
+    MediaSize w171h396
+    MediaSize w180h72
+    MediaSize w180h144
+    MediaSize w198h90
+    MediaSize w216h72
+    MediaSize w216h90
+    MediaSize w216h144
+    MediaSize w216h216
+    MediaSize w216h360
+    MediaSize w234h144
+    MediaSize w234h360
+    MediaSize w234h396
+    MediaSize w252h72
+    MediaSize w288h72
+    MediaSize w288h144
+    MediaSize w288h180
+    MediaSize w288h216
+    MediaSize w288h288
+    *MediaSize w288h360
+    MediaSize w288h432
+    MediaSize w288h468
+    MediaSize w288h936
+
+    Group "General/General"
+      Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
+        *Choice "203dpi/TECBSA4G" "<</HWResolution[203 203]>>setpagedevice"
+        Choice "300dpi/TECBSA4T" "<</HWResolution[300 300]>>setpagedevice"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+      Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+        *Choice "0/Bottom Leading" ""
+        Choice "1/Top Leading" ""
+        Choice "2/Mirror Print Top Leading" ""
+        Choice "3/Mirror Print Bottom Leading" ""
+    Group "PrinterSettings/Printer Settings"
+      Option "Darkness/Temperature" PickOne AnySetup 20.0
+        Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
+        Choice "2/-9" "<</cupsCompression 2>setpagedevice"
+        Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
+        Choice "4/-7" "<</cupsCompression 4>>setpagedevice"
+        Choice "5/-6" "<</cupsCompression 5>>setpagedevice"
+        Choice "6/-5" "<</cupsCompression 6>>setpagedevice"
+        Choice "7/-4" "<</cupsCompression 7>>setpagedevice"
+        Choice "8/-3" "<</cupsCompression 8>>setpagedevice"
+        Choice "9/-2" "<</cupsCompression 9>>setpagedevice"
+        Choice "10/-1" "<</cupsCompression 10>>setpagedevice"
+        *Choice "11/0" "<</cupsCompression 11>>setpagedevice"
+        Choice "12/+1" "<</cupsCompression 12>>setpagedevice"
+        Choice "13/+2" "<</cupsCompression 13>>setpagedevice"
+        Choice "14/+3" "<</cupsCompression 14>>setpagedevice"
+        Choice "15/+4" "<</cupsCompression 15>>setpagedevice"
+        Choice "16/+5" "<</cupsCompression 16>>setpagedevice"
+        Choice "17/+6" "<</cupsCompression 17>>setpagedevice"
+        Choice "18/+7" "<</cupsCompression 18>>setpagedevice"
+        Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
+        Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
+        Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Choice "2/50 mm/sec." ""
+        *Choice "4/101 mm/sec." ""
+        Choice "6/152 mm/sec." ""  
+      Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+        *Choice "0/Batch" ""
+        Choice "1/Peel Off Cell Active" ""
+        Choice "2/Peel Off Cell Not Active" ""
+        Choice "3/Cutter" ""
+      Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+        *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
+        Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
+        Choice "2/Cut Every 2 Labels " "<</cupsRowStep 999>>setpagedevice"
+    Group "AdvancedSetting/Advanced Printer Settings"
+      Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+        *Choice "0/+" ""
+         Choice "1/-" ""
+      Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+        *Choice "000/0.0 mm" ""
+        Choice "010/1.0 mm" ""
+        Choice "020/2.0 mm" ""
+        Choice "030/3.0 mm" ""
+        Choice "040/4.0 mm" ""
+        Choice "050/5.0 mm" ""
+        Choice "060/6.0 mm" ""
+        Choice "070/7.0 mm" ""
+        Choice "080/8.0 mm" ""
+        Choice "090/9.0 mm" ""
+        Choice "100/10.0 mm" ""
+      Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+        *Choice "0/+" ""
+        Choice "1/-" ""
+      Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+        *Choice "000/0.0 mm" ""
+        Choice "010/1.0 mm" ""
+        Choice "020/2.0 mm" ""
+        Choice "030/3.0 mm" ""
+        Choice "040/4.0 mm" ""
+        Choice "050/5.0 mm" ""
+        Choice "060/6.0 mm" ""
+        Choice "070/7.0 mm" ""
+        Choice "080/8.0 mm" ""
+        Choice "090/9.0 mm" ""
+        Choice "100/10.0 mm" ""
+      Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+        *Choice "0/+" ""
+         Choice "1/-" ""
+      Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+        *Choice "00/0.0 mm" ""
+        Choice "10/1.0 mm" ""
+        Choice "20/2.0 mm" ""
+        Choice "30/3.0 mm" ""
+        Choice "40/4.0 mm" ""
+        Choice "50/5.0 mm" ""
+        Choice "60/6.0 mm" ""
+        Choice "70/7.0 mm" ""
+        Choice "80/8.0 mm" ""
+        Choice "90/9.0 mm" ""
+        Choice "99/9.9 mm" ""
+      Option "RbnAdjFwd/Ribbon Forward Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+      Option "RbnAdjBck/Ribbon Back Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+  }
+
+
+  // TEC BSX4 printer
+  {
+    ModelName "BSX4"
+    PCFileName "TECBSX4.PPD"
+    HWMargins 0 0 0 0
+      MediaSize w90h18
+      MediaSize w90h162
+      MediaSize w108h18
+      MediaSize w108h36
+      MediaSize w108h72
+      MediaSize w108h144
+      MediaSize w144h26
+      MediaSize w144h36
+      MediaSize w144h72
+      MediaSize w144h90
+      MediaSize w144h288
+      MediaSize w144h396
+      MediaSize w162h36
+      MediaSize w162h90
+      MediaSize w162h288
+      MediaSize w162h396
+      MediaSize w171h396
+      MediaSize w180h72
+      MediaSize w180h144
+      MediaSize w198h90
+      MediaSize w216h72
+      MediaSize w216h90
+      MediaSize w216h144
+      MediaSize w216h216
+      MediaSize w216h360
+      MediaSize w234h144
+      MediaSize w234h360
+      MediaSize w234h396
+      MediaSize w252h72
+      MediaSize w288h72
+      MediaSize w288h144
+      MediaSize w288h180
+      MediaSize w288h216
+      MediaSize w288h288
+      *MediaSize w288h360
+      MediaSize w288h432
+      MediaSize w288h468
+      MediaSize w288h936
+      HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 72 23
+      MaxSize 295 4246
+  *Resolution k 1 0 0 0 "203dpi/203 DPI"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+        Choice "Thermal2/Thermal Tr. with optimizer" "<</MediaType(Thermal2)>>Setpagedevice"
+        Choice "Direct2/Direct Th. with optimiser" "<</MediaType(Direct2)>>Setpagedevice"
+      Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+        *Choice "0/Bottom Leading" ""
+        Choice "1/Top Leading" ""
+        Choice "2/Mirror Print Top Leading" ""
+        Choice "3/Mirror Print Bottom Leading" ""
+    Group "PrinterSettings/Printer Settings"
+      Option "Darkness/Temperature" PickOne AnySetup 20.0
+        Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
+        Choice "2/-9" "<</cupsCompression 2>setpagedevice"
+        Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
+        Choice "4/-7" "<</cupsCompression 4>>setpagedevice"
+        Choice "5/-6" "<</cupsCompression 5>>setpagedevice"
+        Choice "6/-5" "<</cupsCompression 6>>setpagedevice"
+        Choice "7/-4" "<</cupsCompression 7>>setpagedevice"
+        Choice "8/-3" "<</cupsCompression 8>>setpagedevice"
+        Choice "9/-2" "<</cupsCompression 9>>setpagedevice"
+        Choice "10/-1" "<</cupsCompression 10>>setpagedevice"
+        *Choice "11/0" "<</cupsCompression 11>>setpagedevice"
+        Choice "12/+1" "<</cupsCompression 12>>setpagedevice"
+        Choice "13/+2" "<</cupsCompression 13>>setpagedevice"
+        Choice "14/+3" "<</cupsCompression 14>>setpagedevice"
+        Choice "15/+4" "<</cupsCompression 15>>setpagedevice"
+        Choice "16/+5" "<</cupsCompression 16>>setpagedevice"
+        Choice "17/+6" "<</cupsCompression 17>>setpagedevice"
+        Choice "18/+7" "<</cupsCompression 18>>setpagedevice"
+        Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
+        Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
+        Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Choice "3/76 mm/sec." ""
+        *Choice "6/152 mm/sec." ""
+        Choice "10/254 mm/sec." ""  
+      Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+        *Choice "0/Batch" ""
+        Choice "1/Peel Off Cell Active" ""
+        Choice "2/Peel Off Cell Not Active" ""
+        Choice "3/Cutter" ""
+      Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+        *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
+        Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
+        Choice "2/Cut at End " "<</cupsRowStep 999>>setpagedevice"
+      Group "AdvancedSetting/Advanced Printer Settings"
+       Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "00/0.0 mm" ""
+         Choice "10/1.0 mm" ""
+         Choice "20/2.0 mm" ""
+         Choice "30/3.0 mm" ""
+         Choice "40/4.0 mm" ""
+         Choice "50/5.0 mm" ""
+         Choice "60/6.0 mm" ""
+         Choice "70/7.0 mm" ""
+         Choice "80/8.0 mm" ""
+         Choice "90/9.0 mm" ""
+         Choice "99/9.9 mm" ""
+      Option "RbnAdjFwd/Ribbon Forward Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+       Option "RbnAdjBck/Ribbon Back Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+  }
+  // Toshiba TEC BSX5 printer
+  {
+    ModelName "BSX5"
+    PCFileName "TECBSX5.PPD"
+    HWMargins 0 0 0 0
+      MediaSize w90h18
+      MediaSize w90h162
+      MediaSize w108h18
+      MediaSize w108h36
+      MediaSize w108h72
+      MediaSize w108h144
+      MediaSize w144h26
+      MediaSize w144h36
+      MediaSize w144h72
+      MediaSize w144h90
+      MediaSize w144h288
+      MediaSize w144h396
+      MediaSize w162h36
+      MediaSize w162h90
+      MediaSize w162h288
+      MediaSize w162h396
+      MediaSize w171h396
+      MediaSize w180h72
+      MediaSize w180h144
+      MediaSize w198h90
+      MediaSize w216h72
+      MediaSize w216h90
+      MediaSize w216h144
+      MediaSize w216h216
+      MediaSize w216h360
+      MediaSize w234h144
+      MediaSize w234h360
+      MediaSize w234h396
+      MediaSize w252h72
+      MediaSize w288h72
+      MediaSize w288h144
+      MediaSize w288h180
+      MediaSize w288h216
+      MediaSize w288h288
+      *MediaSize w288h360
+      MediaSize w288h432
+      MediaSize w288h468
+      MediaSize w288h936
+      HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 73 29
+      MaxSize 362 4246
+  *Resolution k 1 0 0 0 "306dpi/306 DPI"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+    Choice "Thermal2/Thermal Tr. with optimiser" "<</MediaType(Thermal2)>>setpagedevice"
+        *Choice "Direct2/Direct Th. with optimiser" "<</MediaType(Direct2)>>setpagedevice"
+      Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+        *Choice "0/Bottom Leading" ""
+        Choice "1/Top Leading" ""
+        Choice "2/Mirror Print Top Leading" ""
+        Choice "3/Mirror Print Bottom Leading" ""
+    Group "PrinterSettings/Printer Settings"
+      Option "Darkness/Temperature" PickOne AnySetup 20.0
+        Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
+        Choice "2/-9" "<</cupsCompression 2>setpagedevice"
+        Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
+        Choice "4/-7" "<</cupsCompression 4>>setpagedevice"
+        Choice "5/-6" "<</cupsCompression 5>>setpagedevice"
+        Choice "6/-5" "<</cupsCompression 6>>setpagedevice"
+        Choice "7/-4" "<</cupsCompression 7>>setpagedevice"
+        Choice "8/-3" "<</cupsCompression 8>>setpagedevice"
+        Choice "9/-2" "<</cupsCompression 9>>setpagedevice"
+        Choice "10/-1" "<</cupsCompression 10>>setpagedevice"
+        *Choice "11/0" "<</cupsCompression 11>>setpagedevice"
+        Choice "12/+1" "<</cupsCompression 12>>setpagedevice"
+        Choice "13/+2" "<</cupsCompression 13>>setpagedevice"
+        Choice "14/+3" "<</cupsCompression 14>>setpagedevice"
+        Choice "15/+4" "<</cupsCompression 15>>setpagedevice"
+        Choice "16/+5" "<</cupsCompression 16>>setpagedevice"
+        Choice "17/+6" "<</cupsCompression 17>>setpagedevice"
+        Choice "18/+7" "<</cupsCompression 18>>setpagedevice"
+        Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
+        Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
+        Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Choice "3/76 mm/sec." ""      
+         *Choice "5/127 mm/sec." ""
+        Choice "8/203 mm/sec." ""  
+      Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+        *Choice "0/Batch" ""
+        Choice "1/Peel Off Cell Active" ""
+        Choice "2/Peel Off Cell Not Active" ""
+        Choice "3/Cutter" ""
+      Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+        *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
+        Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
+        Choice "2/Cut at End " "<</cupsRowStep 999>>setpagedevice"
+      Group "AdvancedSetting/Advanced Printer Settings"
+       Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "00/0.0 mm" ""
+         Choice "10/1.0 mm" ""
+         Choice "20/2.0 mm" ""
+         Choice "30/3.0 mm" ""
+         Choice "40/4.0 mm" ""
+         Choice "50/5.0 mm" ""
+         Choice "60/6.0 mm" ""
+         Choice "70/7.0 mm" ""
+         Choice "80/8.0 mm" ""
+         Choice "90/9.0 mm" ""
+         Choice "99/9.9 mm" ""
+      Option "RbnAdjFwd/Ribbon Forward Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+       Option "RbnAdjBck/Ribbon Back Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+  }
+  // Toshiba BSX6 printer
+  {
+    ModelName "BSX6"
+    PCFileName "TECBSX6.PPD"
+    HWMargins 0 0 0 0
+      MediaSize w90h18
+      MediaSize w90h162
+      MediaSize w108h18
+      MediaSize w108h36
+      MediaSize w108h72
+      MediaSize w108h144
+      MediaSize w144h26
+      MediaSize w144h36
+      MediaSize w144h72
+      MediaSize w144h90
+      MediaSize w144h288
+      MediaSize w144h396
+      MediaSize w162h36
+      MediaSize w162h90
+      MediaSize w162h288
+      MediaSize w162h396
+      MediaSize w171h396
+      MediaSize w180h72
+      MediaSize w180h144
+      MediaSize w198h90
+      MediaSize w216h72
+      MediaSize w216h90
+      MediaSize w216h144
+      MediaSize w216h216
+      MediaSize w216h360
+      MediaSize w234h144
+      MediaSize w234h360
+      MediaSize w234h396
+      MediaSize w252h72
+      MediaSize w288h72
+      MediaSize w288h144
+      MediaSize w288h180
+      MediaSize w288h216
+      MediaSize w288h288
+      *MediaSize w288h360
+      MediaSize w288h432
+      MediaSize w288h468
+      MediaSize w288h936
+      MediaSize w432h72
+      MediaSize w432h144
+      MediaSize w432h216
+      MediaSize w432h288
+      MediaSize w432h360
+      MediaSize w432h432
+      MediaSize w432h468
+      HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 238 29
+      MaxSize 483 4246
+  *Resolution k 1 0 0 0 "305dpi/305 DPI"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+      Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+        *Choice "0/Bottom Leading" ""
+        Choice "1/Top Leading" ""
+        Choice "2/Mirror Print Top Leading" ""
+        Choice "3/Mirror Print Bottom Leading" ""
+    Group "PrinterSettings/Printer Settings"
+      Option "Darkness/Temperature" PickOne AnySetup 20.0
+        Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
+        Choice "2/-9" "<</cupsCompression 2>setpagedevice"
+        Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
+        Choice "4/-7" "<</cupsCompression 4>>setpagedevice"
+        Choice "5/-6" "<</cupsCompression 5>>setpagedevice"
+        Choice "6/-5" "<</cupsCompression 6>>setpagedevice"
+        Choice "7/-4" "<</cupsCompression 7>>setpagedevice"
+        Choice "8/-3" "<</cupsCompression 8>>setpagedevice"
+        Choice "9/-2" "<</cupsCompression 9>>setpagedevice"
+        Choice "10/-1" "<</cupsCompression 10>>setpagedevice"
+        *Choice "11/0" "<</cupsCompression 11>>setpagedevice"
+        Choice "12/+1" "<</cupsCompression 12>>setpagedevice"
+        Choice "13/+2" "<</cupsCompression 13>>setpagedevice"
+        Choice "14/+3" "<</cupsCompression 14>>setpagedevice"
+        Choice "15/+4" "<</cupsCompression 15>>setpagedevice"
+        Choice "16/+5" "<</cupsCompression 16>>setpagedevice"
+        Choice "17/+6" "<</cupsCompression 17>>setpagedevice"
+        Choice "18/+7" "<</cupsCompression 18>>setpagedevice"
+        Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
+        Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
+        Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Choice "3/76 mm/sec." ""
+        *Choice "4/101 mm/sec." ""
+        Choice "8/203 mm/sec." ""  
+      Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+        *Choice "0/Batch" ""
+        Choice "1/Peel Off Cell Active" ""
+        Choice "2/Peel Off Cell Not Active" ""
+        Choice "3/Cutter" ""
+      Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+        *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
+        Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
+        Choice "2/Cut at End " "<</cupsRowStep 999>>setpagedevice"
+      Group "AdvancedSetting/Advanced Printer Settings"
+       Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "00/0.0 mm" ""
+         Choice "10/1.0 mm" ""
+         Choice "20/2.0 mm" ""
+         Choice "30/3.0 mm" ""
+         Choice "40/4.0 mm" ""
+         Choice "50/5.0 mm" ""
+         Choice "60/6.0 mm" ""
+         Choice "70/7.0 mm" ""
+         Choice "80/8.0 mm" ""
+         Choice "90/9.0 mm" ""
+         Choice "99/9.9 mm" ""
+      Option "RbnAdjFwd/Ribbon Forward Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+       Option "RbnAdjBck/Ribbon Back Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+  }
+
+  // Toshiba BSX8
+  {
+      HWMargins 0 0 0 0
+      MediaSize w90h18
+      MediaSize w90h162
+      MediaSize w108h18
+      MediaSize w108h36
+      MediaSize w108h72
+      MediaSize w108h144
+      MediaSize w144h26
+      MediaSize w144h36
+      MediaSize w144h72
+      MediaSize w144h90
+      MediaSize w144h288
+      MediaSize w144h396
+      MediaSize w162h36
+      MediaSize w162h90
+      MediaSize w162h288
+      MediaSize w162h396
+      MediaSize w171h396
+      MediaSize w180h72
+      MediaSize w180h144
+      MediaSize w198h90
+      MediaSize w216h72
+      MediaSize w216h90
+      MediaSize w216h144
+      MediaSize w216h216
+      MediaSize w216h360
+      MediaSize w234h144
+      MediaSize w234h360
+      MediaSize w234h396
+      MediaSize w252h72
+      MediaSize w288h72
+      MediaSize w288h144
+      MediaSize w288h180
+      MediaSize w288h216
+      MediaSize w288h288
+      *MediaSize w288h360
+      MediaSize w288h432
+      MediaSize w288h468
+      MediaSize w288h936
+      MediaSize w432h72
+      MediaSize w432h144
+      MediaSize w432h216
+      MediaSize w432h288
+      MediaSize w432h360
+      MediaSize w432h432
+      MediaSize w432h468
+      MediaSize w576h72
+      MediaSize w576h144
+      MediaSize w576h216
+      MediaSize w576h288
+      MediaSize w576h360
+      MediaSize w576h432
+      MediaSize w576h468
+  {
+    ModelName "BSX8"
+    PCFileName "TECBSX8.PPD"
+    HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 286 29
+      MaxSize 605 4246
+  *Resolution k 1 0 0 0 "305dpi/305 DPI"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+        Choice "Thermal2/Thermal Tr. with optimizer" "<</MediaType(Thermal2)>>Setpagedevice"
+        Choice "Direct2/Direct Th. with optimiser" "<</MediaType(Direct2)>>Setpagedevice"
+      }
+  {
+    ModelName "B852R"
+    PCFileName "TECB852R.PPD"
+    HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 283 35
+      MaxSize 614 1814
+  *Resolution k 1 0 0 0 "300dpi/300 DPI"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+      }
+      Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+        *Choice "0/Bottom Leading" ""
+        Choice "1/Top Leading" ""
+        Choice "2/Mirror Print Top Leading" ""
+        Choice "3/Mirror Print Bottom Leading" ""
+    Group "PrinterSettings/Printer Settings"
+      Option "Darkness/Temperature" PickOne AnySetup 20.0
+        Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
+        Choice "2/-9" "<</cupsCompression 2>setpagedevice"
+        Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
+        Choice "4/-7" "<</cupsCompression 4>>setpagedevice"
+        Choice "5/-6" "<</cupsCompression 5>>setpagedevice"
+        Choice "6/-5" "<</cupsCompression 6>>setpagedevice"
+        Choice "7/-4" "<</cupsCompression 7>>setpagedevice"
+        Choice "8/-3" "<</cupsCompression 8>>setpagedevice"
+        Choice "9/-2" "<</cupsCompression 9>>setpagedevice"
+        Choice "10/-1" "<</cupsCompression 10>>setpagedevice"
+        *Choice "11/0" "<</cupsCompression 11>>setpagedevice"
+        Choice "12/+1" "<</cupsCompression 12>>setpagedevice"
+        Choice "13/+2" "<</cupsCompression 13>>setpagedevice"
+        Choice "14/+3" "<</cupsCompression 14>>setpagedevice"
+        Choice "15/+4" "<</cupsCompression 15>>setpagedevice"
+        Choice "16/+5" "<</cupsCompression 16>>setpagedevice"
+        Choice "17/+6" "<</cupsCompression 17>>setpagedevice"
+        Choice "18/+7" "<</cupsCompression 18>>setpagedevice"
+        Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
+        Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
+        Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Choice "2/50.8 mm/sec." ""
+        *Choice "4/101 mm/sec." ""
+        Choice "8/203 mm/sec." ""  
+      Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+        *Choice "0/Batch" ""
+        Choice "1/Peel Off Cell Active" ""
+        Choice "2/Peel Off Cell Not Active" ""
+        Choice "3/Cutter" ""
+      Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+        *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
+        Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
+        Choice "2/Cut at End " "<</cupsRowStep 999>>setpagedevice"
+      Group "AdvancedSetting/Advanced Printer Settings"
+       Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "00/0.0 mm" ""
+         Choice "10/1.0 mm" ""
+         Choice "20/2.0 mm" ""
+         Choice "30/3.0 mm" ""
+         Choice "40/4.0 mm" ""
+         Choice "50/5.0 mm" ""
+         Choice "60/6.0 mm" ""
+         Choice "70/7.0 mm" ""
+         Choice "80/8.0 mm" ""
+         Choice "90/9.0 mm" ""
+         Choice "99/9.9 mm" ""
+      Option "RbnAdjFwd/Ribbon Forward Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+       Option "RbnAdjBck/Ribbon Back Adjust" PickOne AnySetup 20.0
+        *Choice "-00/0" ""
+        Choice "-01/-1" ""
+        Choice "-02/-2" ""
+        Choice "-03/-3" ""
+        Choice "-04/-4" ""
+        Choice "-05/-5" ""
+        Choice "-06/-6" ""
+        Choice "-07/-7" ""
+        Choice "-08/-8" ""
+        Choice "-09/-9" ""
+        Choice "-10/-10" ""
+        Choice "-11/-11" ""
+        Choice "-12/-12" ""
+        Choice "-13/-13" ""
+        Choice "-14/-14" ""
+        Choice "-15/-15" ""
+  }
+
+  // TEc BSV4D 203 dpi & TEC BSV4T
+  {
+    HWMargins 0 0 0 0
+      MediaSize w90h18
+      MediaSize w90h162
+      MediaSize w108h18
+      MediaSize w108h36
+      MediaSize w108h72
+      MediaSize w108h144
+      MediaSize w144h26
+      MediaSize w144h36
+      MediaSize w144h72
+      MediaSize w144h90
+      MediaSize w144h288
+      MediaSize w144h396
+      MediaSize w162h36
+      MediaSize w162h90
+      MediaSize w162h288
+      MediaSize w162h396
+      MediaSize w171h396
+      MediaSize w180h72
+      MediaSize w180h144
+      MediaSize w198h90
+      MediaSize w216h72
+      MediaSize w216h90
+      MediaSize w216h144
+      MediaSize w216h216
+      MediaSize w216h360
+      MediaSize w234h144
+      MediaSize w234h360
+      MediaSize w234h396
+      MediaSize w252h72
+      MediaSize w288h72
+      MediaSize w288h144
+      MediaSize w288h180
+      MediaSize w288h216
+      MediaSize w288h288
+      *MediaSize w288h360
+      MediaSize w288h432
+      MediaSize w288h468
+      MediaSize w288h936
+     {
+      ModelName "BSV4D"
+      PCFileName "TECBSV4D.PPD" 
+        HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 71 23
+      MaxSize 306 1726
+  *Resolution k 1 0 0 0 "203dpi/203 DPI"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+     }
+      { 
+      ModelName "BSV4T"
+      PCFileName "TECBSV4T.PPD"   
+      HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 71 23
+      MaxSize 306 1726
+  *Resolution k 1 0 0 0 "203dpi/203 DPI"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+     }
+      Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+        *Choice "0/Bottom Leading" ""
+        Choice "1/Top Leading" ""
+        Choice "2/Mirror Print Top Leading" ""
+        Choice "3/Mirror Print Bottom Leading" ""
+    Group "PrinterSettings/Printer Settings"
+      Option "Darkness/Temperature" PickOne AnySetup 20.0
+        Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
+        Choice "2/-9" "<</cupsCompression 2>setpagedevice"
+        Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
+        Choice "4/-7" "<</cupsCompression 4>>setpagedevice"
+        Choice "5/-6" "<</cupsCompression 5>>setpagedevice"
+        Choice "6/-5" "<</cupsCompression 6>>setpagedevice"
+        Choice "7/-4" "<</cupsCompression 7>>setpagedevice"
+        Choice "8/-3" "<</cupsCompression 8>>setpagedevice"
+        Choice "9/-2" "<</cupsCompression 9>>setpagedevice"
+        Choice "10/-1" "<</cupsCompression 10>>setpagedevice"
+        *Choice "11/0" "<</cupsCompression 11>>setpagedevice"
+        Choice "12/+1" "<</cupsCompression 12>>setpagedevice"
+        Choice "13/+2" "<</cupsCompression 13>>setpagedevice"
+        Choice "14/+3" "<</cupsCompression 14>>setpagedevice"
+        Choice "15/+4" "<</cupsCompression 15>>setpagedevice"
+        Choice "16/+5" "<</cupsCompression 16>>setpagedevice"
+        Choice "17/+6" "<</cupsCompression 17>>setpagedevice"
+        Choice "18/+7" "<</cupsCompression 18>>setpagedevice"
+        Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
+        Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
+        Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Choice "2/50 mm/sec." ""
+        *Choice "3/76.2 mm/sec." ""
+        Choice "4/101.6 mm/sec." ""  
+        Choice "5/127.0 mm/sec." ""  
+      Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+        *Choice "0/Batch" ""
+        Choice "1/Peel Off Cell Active" ""
+        Choice "3/Cutter" ""
+      Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+        *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
+        Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
+        Choice "2/Cut at End " "<</cupsRowStep 999>>setpagedevice"
+      Group "AdvancedSetting/Advanced Printer Settings"
+       Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "005/0.5 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "015/1.5 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "025/2.5 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "035/3.5 mm" ""
+        Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+          *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "00/0.0 mm" ""
+         Choice "10/1.0 mm" ""
+         Choice "20/2.0 mm" ""
+         Choice "30/3.0 mm" ""
+         Choice "40/4.0 mm" ""
+         Choice "50/5.0 mm" ""
+         Choice "60/6.0 mm" ""
+         Choice "70/7.0 mm" ""
+         Choice "80/8.0 mm" ""
+         Choice "90/9.0 mm" ""
+         Choice "99/9.9 mm" ""
+   }
+  // TECBEV4T-GS14 
+  {  
+    HWMargins 0 0 0 0
+      MediaSize w90h18
+      MediaSize w90h162
+      MediaSize w108h18
+      MediaSize w108h36
+      MediaSize w108h72
+      MediaSize w108h144
+      MediaSize w144h26
+      MediaSize w144h36
+      MediaSize w144h72
+      MediaSize w144h90
+      MediaSize w144h288
+      MediaSize w144h396
+      MediaSize w162h36
+      MediaSize w162h90
+      MediaSize w162h288
+      MediaSize w162h396
+      MediaSize w171h396
+      MediaSize w180h72
+      MediaSize w180h144
+      MediaSize w198h90
+      MediaSize w216h72
+      MediaSize w216h90
+      MediaSize w216h144
+      MediaSize w216h216
+      MediaSize w216h360
+      MediaSize w234h144
+      MediaSize w234h360
+      MediaSize w234h396
+      MediaSize w252h72
+      MediaSize w288h72
+      MediaSize w288h144
+      MediaSize w288h180
+      MediaSize w288h216
+      MediaSize w288h288
+      *MediaSize w288h360
+      MediaSize w288h468
+      MediaSize w288h936
+     {
+       Manufacturer "Toshiba Tec"
+       ModelName "BEV4TGS14"
+       PCFileName "TECBEV4D.PPD"
+       HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 71 23
+      MaxSize 306 1726
+  Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
+        *Choice "203dpi/TECBEV4GG" "<</HWResolution[203 203]>>setpagedevice"
+        Choice "300dpi/TECBEV4TT" "<</HWResolution[300 300]>>setpagedevice"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+     }
+       {
+        ModelName "BEV4TGS14"
+      PCFileName "TECBEV4T.PPD"
+    HWMargins 0 0 0 0
+    VariablePaperSize Yes
+      MinSize 71 23
+      MaxSize 306 1726
+  Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
+        *Choice "203dpi/TECBEV4G" "<</HWResolution[203 203]>>setpagedevice"
+        Choice "300dpi/TECBEV4T" "<</HWResolution[300 300]>>setpagedevice"
+   Group "General/General"
+      Option "Gap/Label Gap" PickOne AnySetup 20.0
+        Choice "0/0 mm " ""
+        Choice "1/1 mm " ""
+        *Choice "2/2 mm " ""
+        Choice "3/3 mm " ""
+        Choice "4/4 mm " ""
+        Choice "5/5 mm " ""
+      Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+        Choice "0/Continous" ""
+        Choice "1/Reflective" ""
+        *Choice "2/Transmissive" ""
+        Choice "3/Reflective Pre-Print" ""
+        Choice "4/Transmissive Pre-Print" ""
+      Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
+        *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
+        }
+  Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+        *Choice "0/Bottom Leading" ""
+        Choice "1/Top Leading" ""
+        Choice "2/Mirror Print Top Leading" ""
+        Choice "3/Mirror Print Bottom Leading" ""
+    Group "PrinterSettings/Printer Settings"
+      Option "Darkness/Temperature" PickOne AnySetup 20.0
+        Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
+        Choice "2/-9" "<</cupsCompression 2>setpagedevice"
+        Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
+        Choice "4/-7" "<</cupsCompression 4>>setpagedevice"
+        Choice "5/-6" "<</cupsCompression 5>>setpagedevice"
+        Choice "6/-5" "<</cupsCompression 6>>setpagedevice"
+        Choice "7/-4" "<</cupsCompression 7>>setpagedevice"
+        Choice "8/-3" "<</cupsCompression 8>>setpagedevice"
+        Choice "9/-2" "<</cupsCompression 9>>setpagedevice"
+        Choice "10/-1" "<</cupsCompression 10>>setpagedevice"
+        *Choice "11/0" "<</cupsCompression 11>>setpagedevice"
+        Choice "12/+1" "<</cupsCompression 12>>setpagedevice"
+        Choice "13/+2" "<</cupsCompression 13>>setpagedevice"
+        Choice "14/+3" "<</cupsCompression 14>>setpagedevice"
+        Choice "15/+4" "<</cupsCompression 15>>setpagedevice"
+        Choice "16/+5" "<</cupsCompression 16>>setpagedevice"
+        Choice "17/+6" "<</cupsCompression 17>>setpagedevice"
+        Choice "18/+7" "<</cupsCompression 18>>setpagedevice"
+        Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
+        Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
+        Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Choice "2/50 mm/sec." ""
+        *Choice "3/76.2 mm/sec." ""
+        Choice "4/101.6 mm/sec." ""  
+        Choice "5/127.0 mm/sec." ""  
+      Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+        *Choice "0/Batch" ""
+        Choice "1/Peel Off Cell Active" ""
+        Choice "3/Cutter" ""
+      Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+        *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
+        Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
+        Choice "2/Cut at End " "<</cupsRowStep 999>>setpagedevice"
+      Group "AdvancedSetting/Advanced Printer Settings"
+       Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "040/4.0 mm" ""
+         Choice "050/5.0 mm" ""
+         Choice "060/6.0 mm" ""
+         Choice "070/7.0 mm" ""
+         Choice "080/8.0 mm" ""
+         Choice "090/9.0 mm" ""
+         Choice "100/10.0 mm" ""
+       Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+         *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+         *Choice "000/0.0 mm" ""
+         Choice "005/0.5 mm" ""
+         Choice "010/1.0 mm" ""
+         Choice "015/1.5 mm" ""
+         Choice "020/2.0 mm" ""
+         Choice "025/2.5 mm" ""
+         Choice "030/3.0 mm" ""
+         Choice "035/3.5 mm" ""
+        Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+          *Choice "0/+" ""
+          Choice "1/-" ""
+       Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+         *Choice "00/0.0 mm" ""
+         Choice "10/1.0 mm" ""
+         Choice "20/2.0 mm" ""
+         Choice "30/3.0 mm" ""
+         Choice "40/4.0 mm" ""
+         Choice "50/5.0 mm" ""
+         Choice "60/6.0 mm" ""
+         Choice "70/7.0 mm" ""
+         Choice "80/8.0 mm" ""
+         Choice "90/9.0 mm" ""
+         Choice "99/9.9 mm" ""
+   }
+}

@@ -47,6 +47,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <math.h>
 
 
 /*
@@ -62,28 +63,38 @@
 #define TEC_TPCL2	0x14		/* Toshiba Tec TPCL2 based printers */
 #define INTSIZE		20 			/* MAXIMUM CHARACTERS INTEGER */
 
+#define TEC_GMODE_TOPIX 3    /* Toshiba Tec Graphics Modes */
+#define TEC_GMODE_HEX_AND 1
+#define TEC_GMODE_HEX_OR 5
+
+
 /*
  * Globals...
  */
-unsigned char	*Buffer;		/* Output buffer */
-unsigned char	*CompBuffer;		/* Compression buffer */
-unsigned char	*LastBuffer;		/* Last buffer */
-int		LastSet;		/* Number of repeat characters */
+static unsigned char	*Buffer;		     /* Output buffer */
+static unsigned char	*LastBuffer;		 /* Last buffer */
+static unsigned char  *CompBuffer;     /* Byte array of whole image */
+unsigned char         *CompBufferPtr;  /* Pointer to current position in CompBuffer */
+int		LastSet;        /* Number of repeat characters */
 int		ModelNumber,		/* cupsModelNumber attribute */
-		Page,			/* Current page */
-		Feed,			/* Number of lines to skip */
-		Canceled;		/* Non-zero if job is canceled */
-char		Xsprint[25];		/* Final command for tec print string 2009 p.kong*/
-int 		Gmode; 			/* Tec Graphics mode pkong 2009*/
+      Page,           /* Current page */
+      Feed,           /* Number of lines to skip */
+      Canceled;		    /* Non-zero if job is canceled */
+char	Xsprint[25];		/* Final command for tec print string 2009 p.kong*/
+int 	Gmode; 			    /* Tec Graphics mode */
 
 /*
  * Prototypes...
  */
 void	Setup(ppd_file_t *ppd);
-void	StartPage(ppd_file_t *ppd, cups_page_header_t *header);
-void	EndPage(ppd_file_t *ppd, cups_page_header_t *header);
+void	StartPage(ppd_file_t *ppd, cups_page_header2_t *header);
+void	EndPage(ppd_file_t *ppd, cups_page_header2_t *header);
 void	CancelJob(int sig);
-void	OutputLine(ppd_file_t *ppd, cups_page_header_t *header, int y);
+void	OutputLine(ppd_file_t *ppd, cups_page_header2_t *header, int y);
+
+void	TOPIXCompress(ppd_file_t *ppd, cups_page_header2_t *header, int y);
+void  TOPIXCompressOutputBuffer();
+
 void	TPCLCompress(char repeat_char, int repeat_count);
 
 
@@ -106,6 +117,8 @@ Setup(ppd_file_t *ppd)			/* I - PPD file */
    */
   if (ppd)
     ModelNumber = ppd->model_number;
+  else
+    fputs("WARNING: Unable to determine model number\n", stderr);
   
   /*
    * Initialize based on the model number...
@@ -114,22 +127,26 @@ Setup(ppd_file_t *ppd)			/* I - PPD file */
   switch (ModelNumber)
   {
     case TEC_TPCL2 :
+
+      // Send Reset
+      puts("{WS|}");
+
       /*  
        * Modification to take in consideration feed ajust reverse feed etc
        */
-      strcpy(Fadjm,"{AX;\0"); /* Place command start */
+      strcpy(Fadjm,"{AX;"); /* Place command start */
       /* feed adjust */
       choice = ppdFindMarkedChoice(ppd, "FAdjSgn");
     	switch (atoi(choice->choice))
     	{
       	case 0 :
-        	strcat(Fadjm,"+\0");
+        	strcat(Fadjm,"+");
         	break;
        	case 1 :
-        	strcat(Fadjm,"-\0");
+        	strcat(Fadjm,"-");
         	break;
       	default :
-        	strcat(Fadjm,"+\0");
+        	strcat(Fadjm,"+");
         	break;
      	}
       choice = ppdFindMarkedChoice(ppd, "FAdjV");
@@ -140,13 +157,13 @@ Setup(ppd_file_t *ppd)			/* I - PPD file */
     	switch (atoi(choice->choice))
       {
         case 0 :
-          strcat(Fadjm,",+\0");
+          strcat(Fadjm,",+");
         	break;
       	case 1 :
-        	strcat(Fadjm,",-\0");
+        	strcat(Fadjm,",-");
         	break;
       	default :
-        	strcat(Fadjm,",+\0");
+        	strcat(Fadjm,",+");
         	break;
       }
       choice = ppdFindMarkedChoice(ppd, "CAdjV");
@@ -157,13 +174,13 @@ Setup(ppd_file_t *ppd)			/* I - PPD file */
 	    switch (atoi(choice->choice))
     	{
        	case 0 :
-         	strcat(Fadjm,",+\0");
+         	strcat(Fadjm,",+");
         	break;
       	case 1 :
-        	strcat(Fadjm,",-\0");
+        	strcat(Fadjm,",-");
         	break;
        	default :
-        	strcat(Fadjm,",+\0");
+        	strcat(Fadjm,",+");
         	break;
      	}
 
@@ -171,21 +188,22 @@ Setup(ppd_file_t *ppd)			/* I - PPD file */
 	    strcat(Fadjm,choice->choice);
       
       /* close the command */
-	    strcat(Fadjm,"|}\n\0");
+	    strcat(Fadjm,"|}");
       /* send the command */
     	puts(Fadjm); /*send advanced parameters */
 
       /* Send ribbon Motor setup parameters */
-	    strcpy(Radj,"{RM;\0");	/* start command for ribbon */
+	    strcpy(Radj,"{RM;");	/* start command for ribbon */
     	choice = ppdFindMarkedChoice(ppd, "RbnAdjFwd");
     	strcat(Radj,choice->choice); /* value for take up motor */
     	choice = ppdFindMarkedChoice(ppd, "RbnAdjBck");
     	strcat(Radj,choice->choice);
-    	strcat(Radj,"|}\n\0");
+    	strcat(Radj,"|}");
     	puts(Radj);
       break;
 
   } // Switch ModelNumber
+
 }
 
 
@@ -194,12 +212,13 @@ Setup(ppd_file_t *ppd)			/* I - PPD file */
  */
 void
 StartPage(ppd_file_t         *ppd,	/* I - PPD file */
-          cups_page_header_t *header)	/* I - Page header */
+          cups_page_header2_t *header)	/* I - Page header */
 {
   ppd_choice_t  *choice;		/* Marked choice */
-  int         	length;			/* Actual label length */
-  int           Labelgap;		/* length of labelgap */
-  int 		      Width;			/* page with in mm */
+  int           labelgap;		/* length of labelgap */
+  int           labelpitch; /* label pitch, distance from start of one label to the next */
+  int         	length;			/* Effective label length */
+  int 		      width;			/* Effective label width */
   char		      *Fadjt;			/* Fine adjust temperature */
   
 #if defined(HAVE_SIGACTION) && !defined(HAVE_SIGSET)
@@ -241,8 +260,8 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   fprintf(stderr, "DEBUG: NumCopies = %d\n", header->NumCopies);
   fprintf(stderr, "DEBUG: Orientation = %d\n", header->Orientation);
   fprintf(stderr, "DEBUG: OutputFaceUp = %d\n", header->OutputFaceUp);
-  fprintf(stderr, "DEBUG: PageSize = [ %d %d ]\n", header->PageSize[0],
-          header->PageSize[1]);
+  fprintf(stderr, "DEBUG: cupsPageSize = [ %f %f ]\n", header->cupsPageSize[0],
+          header->cupsPageSize[1]);
   fprintf(stderr, "DEBUG: Separations = %d\n", header->Separations);
   fprintf(stderr, "DEBUG: TraySwitch = %d\n", header->TraySwitch);
   fprintf(stderr, "DEBUG: Tumble = %d\n", header->Tumble);
@@ -277,27 +296,24 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   { 
     case TEC_TPCL2  :
       // printf("{XJ;Page Start|}");
+      
     	/*
-       * First paper size Dxxxx,xxxx,xxxx then
-       * Start bitmap graphics...
+       * First paper size Dxxxx,xxxx,xxxx
+       * 
+       *   100 == 10.0mm
        */
-
-    	Gmode =1;  /* default graphics drawing mode */
-      choice = ppdFindMarkedChoice(ppd,"TeGraphicsMode");
-      if (atoi(choice->choice) == 1)
-        Gmode = 1;
-      else if (atoi(choice->choice) == 2)
-        Gmode = 5; 
 
       /* Get labelgap for printing */
       choice = ppdFindMarkedChoice(ppd, "Gap");
-      Labelgap = atoi(choice->choice)*10;
-      length = header->PageSize[1]*254/72 + Labelgap;
-      Width = header->PageSize[0]*254/72;
+      labelgap = atoi(choice->choice) * 10;
 
-      /* Send label size */
-      printf("{D%04d,%04d,%04d|}\n",length,Width,header->PageSize[1]*254/72); 
-	    printf("{C|}\n"); 	/*clear print buffer */
+      /* Calculate page widths and heights */
+      length = (int) (header->cupsPageSize[1] * 254/72);
+      labelpitch = length + labelgap;
+      width = (int) (header->cupsPageSize[0] * 254/72);
+
+      /* Send label size, assume gap is same all the way round */
+      printf("{D%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
 
       /*
        * Place the right command in the parameter AY temperature fine adjust
@@ -305,67 +321,67 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
       switch (header->cupsCompression)
       {
         case 1 :
-          strcpy(Fadjt,"{AY;-10,\0");
+          strcpy(Fadjt,"{AY;-10,");
         	break;
         case 2 :
-          strcpy(Fadjt,"{AY;-09,\0");
+          strcpy(Fadjt,"{AY;-09,");
           break;
         case 3 :
-          strcpy(Fadjt,"{AY;-08,\0");
+          strcpy(Fadjt,"{AY;-08,");
           break;
         case 4 :
-          strcpy(Fadjt,"{AY;-07,\0");
+          strcpy(Fadjt,"{AY;-07,");
           break;
         case 5 :
-          strcpy(Fadjt,"{AY;-06,\0");
+          strcpy(Fadjt,"{AY;-06,");
           break;
         case 6 :
-          strcpy(Fadjt,"{AY;-05,\0");
+          strcpy(Fadjt,"{AY;-05,");
           break;
         case 7 :
-          strcpy(Fadjt,"{AY;-04,\0");
+          strcpy(Fadjt,"{AY;-04,");
           break;
         case 8 :
-          strcpy(Fadjt,"{AY;-03,\0");
+          strcpy(Fadjt,"{AY;-03,");
           break;
         case 9 :
-          strcpy(Fadjt,"{AY;-02,\0");
+          strcpy(Fadjt,"{AY;-02,");
           break;
         case 10 :
-          strcpy(Fadjt,"{AY;-01,\0");
+          strcpy(Fadjt,"{AY;-01,");
           break;
         case 11 :
-	        strcpy(Fadjt,"{AY;+00,\0");
+	        strcpy(Fadjt,"{AY;+00,");
           break;
         case 12 :
-          strcpy(Fadjt,"{AY;+01,\0");
+          strcpy(Fadjt,"{AY;+01,");
           break;
         case 13 :
-          strcpy(Fadjt,"{AY;+02,\0");
+          strcpy(Fadjt,"{AY;+02,");
           break;
         case 14 :
-          strcpy(Fadjt,"{AY;+03,\0");
+          strcpy(Fadjt,"{AY;+03,");
           break;
         case 15 :
-          strcpy(Fadjt,"{AY;+04,\0");
+          strcpy(Fadjt,"{AY;+04,");
           break;
         case 16 :
-          strcpy(Fadjt,"{AY;+05,\0");
+          strcpy(Fadjt,"{AY;+05,");
 	        break;
         case 17 :
-          strcpy(Fadjt,"{AY;+06,\0");
+          strcpy(Fadjt,"{AY;+06,");
 	        break;
         case 18 :
-          strcpy(Fadjt,"{AY;+07,\0");
+          strcpy(Fadjt,"{AY;+07,");
           break;
         case 19 :
-          strcpy(Fadjt,"{AY;+08,\0");
+          strcpy(Fadjt,"{AY;+08,");
           break;
         case 20 :
-          strcpy(Fadjt,"{AY;+09,\0");
+          strcpy(Fadjt,"{AY;+09,");
           break;
         case 21 :
-          strcpy(Fadjt,"{AY;+10,\0");
+          strcpy(Fadjt,"{AY;+10,");
           break;
       }
       
@@ -373,24 +389,44 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
        * Completing fine adjust according to Thermal or direct printing
        */
       if (!strcmp(header->MediaType, "Thermal"))
-        strcat(Fadjt,"1|}\0");
+        strcat(Fadjt,"1|}");
       else if (!strcmp(header->MediaType, "Direct"))
-        strcat(Fadjt,"0|}\n\0");
+        strcat(Fadjt,"0|}");
       
       /*
        * Send parameter to printer
        */
       puts(Fadjt);
 
+      //printf("{T|}\n");   /* Feed one sheet of paper */
+	    printf("{C|}\n"); 	/* clear image buffer */
+
       /* Get graphics mode from ppd file for graphics drawing */
-      printf("{SG;0000,0000,%04d,%04d,%d,",header->cupsBytesPerLine * 8,header->cupsHeight,Gmode);
+      int height = header->cupsHeight;
+      choice = ppdFindMarkedChoice(ppd,"teGraphicsMode");
+      switch (atoi(choice->choice)) {
+        case 3:
+          Gmode = TEC_GMODE_HEX_OR; // OR drawing hex mode
+          break;
+        case 2:
+          Gmode = TEC_GMODE_HEX_AND; // AND drawing hex mode
+          break;
+        case 1:
+        default:
+          Gmode = TEC_GMODE_TOPIX;
+          height = 300; // Overwrite height field
+      }
+      printf("{SG;0000,0000,%04d,%04d,%d,", header->cupsBytesPerLine * 8, height, Gmode);
       
       /*
-       * Allocate buffers for 8 dots per byte graphics
+       * Allocate buffers for 8 dots per byte graphics ready for TOPIX compression
        */
-	    CompBuffer = malloc(header->cupsBytesPerLine + 1);
       LastBuffer = malloc(header->cupsBytesPerLine);
-	    LastSet    = 0;
+      memset(LastBuffer, 0, header->cupsBytesPerLine);
+      // Allocate big chunk of memory for parts of TOPIX image 
+      CompBuffer = malloc(0xFFFF);
+      memset(CompBuffer, 0, 0xFFFF);
+      CompBufferPtr = CompBuffer;
 	    break;
   }
 
@@ -407,7 +443,7 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
  */
 void
 EndPage(ppd_file_t *ppd,		/* I - PPD file */
-        cups_page_header_t *header)	/* I - Page header */
+        cups_page_header2_t *header)	/* I - Page header */
 {
   int 		      Quant;	 		/* Quantity to print */
   char		      *Temp;			/* Temporary string */
@@ -441,22 +477,26 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
   switch (ModelNumber)
   {    
       case TEC_TPCL2  :
+        /*
+         * Terminate sending graphics
+         */
+        if (Gmode == TEC_GMODE_TOPIX)
+          TOPIXCompressOutputBuffer();
+        printf("|}\n");
+
+
         if (Canceled)
         {
 	        /*
            * Ramclear in case of error
            */
-          puts("{WR|}\n");
+          puts("{WR|}");
           break;
         }
 
         /*
-         * Start label...
-         */
-        /*
          * Set media tracking...
          */
-
         if (ppdIsMarked(ppd, "teMediaTracking", "0"))
           detect = 0;
         else if (ppdIsMarked(ppd, "teMediaTracking", "1"))
@@ -582,8 +622,6 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
        * send print command 
        * Free compression buffers...
        */
-      free(CompBuffer);
-      free(LastBuffer);
 
   } // end switch ModelNumber
 
@@ -606,10 +644,11 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
   signal(SIGTERM, SIG_IGN);
 #endif /* HAVE_SIGSET */
 
- /*
-  * Free memory...
-  */
-
+  /*
+   * Free memory...
+   */
+  free(LastBuffer);
+  free(CompBuffer);
   free(Buffer);
 }
 
@@ -629,78 +668,150 @@ CancelJob(int sig)			/* I - Signal */
 
 
 /*
- * 'OutputLine()' - Output a line of graphics...
+ * 'OutputLine()' - Output a line of graphics.
+ * 
+ * Some versions of this method check to see if the Buffer has data, this doesn't.
+ * Empty lines can often be skipped if the buffer is checked.
  */
 void
 OutputLine(ppd_file_t         *ppd,	/* I - PPD file */
-           cups_page_header_t *header,	/* I - Page header */
+           cups_page_header2_t *header,	/* I - Page header */
            int                y)	/* I - Line number */
 {
-  // int            i;			      /* Looping var */
-  // unsigned char	*ptr;         /* Pointer into buffer */
-  // unsigned char	*compptr;     /* Pointer into compression buffer */
-  // char		        repeat_char;  /* Repeated character */
-  // int		        repeat_count; /* Number of repeated characters */
-  // static const char *hex = "0123456789ABCDEF"; /* Hex digits */
 
   switch (ModelNumber)
   {
-    
     case TEC_TPCL2 :
-      /* 
-       *  Read the buffer and send directly in hexmode 8 bits.
-       *  In case of sending the page as an image to the printer added by p.kong S.K.E sarl 2009
-       */ 
-      if (Buffer[0] || memcmp(Buffer, Buffer + 1, header->cupsBytesPerLine))
-      {
+      if (Gmode == TEC_GMODE_TOPIX) {
+        TOPIXCompress(ppd, header, y);
+      } else {
+        // Hex Output
         fwrite(Buffer, 1, header->cupsBytesPerLine, stdout);
-        fflush(stdout);
       }
       break;
   } // switch ModelNumber
 }
 
 
+
 /*
- * 'TPCLCompress()' - Output a run-length compression sequence.
+ * 'TOPIXCompress()' - Apply TOPIX compression mechanism to current data in buffers
  */
 void
-TPCLCompress(char repeat_char,		/* I - Character to repeat */
-	           int  repeat_count)		/* I - Number of repeated characters */
+TOPIXCompress(ppd_file_t         *ppd,	    /* I - PPD file */
+              cups_page_header2_t *header,	/* I - Page header */
+              int                y)         /* Line number */
 {
-  if (repeat_count > 1)
-  {
-    /*
-     * Print as many z's as possible - they are the largest denomination
-     * representing 400 characters (zC stands for 400 adjacent C's)	
-     */	
-    while (repeat_count >= 400)
-    {
-      putchar('z');
-      repeat_count -= 400;
-    }
+  int               i;              /* Index into Buffer */
+  int               max;            /* Max number of items per line */
+  unsigned char     line[8][9][9] = {0};  /* Current line */
+  int               l1, l2, l3;     /* Current Positions in line */ 
+  unsigned char     cl1, cl2, cl3;  /* Current Characters */
 
-    /*
-     * Then print 'g' through 'y' as multiples of 20 characters...
-     */
-    if (repeat_count >= 20)
-    {
-      putchar('f' + repeat_count / 20);
-      repeat_count %= 20;
-    }
+  int               width;          /* Max width of the line */
+  unsigned char     xor;      /* Current XORed character */
+  unsigned char     *ptr;     /* Pointer into the Compressed Line Buffer */
+ 
 
-    /*
-     * Finally, print 'G' through 'Y' as 1 through 19 characters...
-     */
-    if (repeat_count > 0)
-      putchar('F' + repeat_count);
+  width = header->cupsBytesPerLine;
+  max = 8 * 9 * 9;
+
+  /*
+   * Ensure that we will not overrun the buffer by sending 
+   * to stdout when we get to the danger zone (width + ((width / 8) * 3))
+   */
+  if ((CompBufferPtr - CompBuffer) > (0xFFFF - (width + (ceil(width / 8) * 3)))) {
+    TOPIXCompressOutputBuffer();
   }
 
   /*
-   * Then the character to be repeated...
+   * Perform XOR on raw data for TOPIX data
    */
-  putchar(repeat_char);
+  cl1 = 0;
+  i = 0;
+  for (l1 = 0; l1 <= 7 && i < width; l1++)
+  {
+    cl2 = 0;
+    for (l2 = 1; l2 <= 8 && i < width; l2++)
+    {
+      cl3 = 0;
+      for (l3 = 1; l3 <= 8 && i < width; l3++, i++)
+      {
+        xor = Buffer[i] ^ LastBuffer[i];
+        line[l1][l2][l3] = xor;
+        if (xor > 0) {
+          // There is a change! Ensure its recorded
+          cl3 |= (1 << (8 - l3));
+        }
+      } // L3
+
+      line[l1][l2][0] = cl3;
+      if (cl3 != 0)
+        cl2 |= (1 << (8 - l2));
+    } // L2
+
+    line[l1][0][0] = cl2;
+    if (cl2 != 0)
+      cl1 |= (1 << (7 - l1));
+  } // L1
+
+
+  // Always add CL1 for line
+  *CompBufferPtr = cl1;
+  CompBufferPtr++;
+
+  /*
+   * Copy the line into the compressed buffer with all the
+   * white space removed.
+   */
+  if (cl1 > 0) {
+    ptr = &line[0][0][0];
+    for(i = 0; i < max; i++) {
+      if (*ptr != 0) {
+        *CompBufferPtr = *ptr;
+        CompBufferPtr++;
+      }
+      ptr++;
+    }
+  }
+  
+  /*
+   * Copy line into last buffer ready for next loop
+   */
+  memcpy(LastBuffer, Buffer, header->cupsBytesPerLine);
 }
+
+/*
+ * 'TOPIXCompressOutputBuffer()' - Send a set of data to output
+ */
+void TOPIXCompressOutputBuffer()
+{
+  unsigned short len;
+  unsigned short belen; /* Big-endian short! */
+
+  len = (unsigned short) (CompBufferPtr - CompBuffer);
+  if (len == 0)
+    return;
+
+  fprintf(stderr, "DEBUG: Sending output with length: %d \n", len);
+
+  // Convert into Big Endian (This may be OS dependant!)
+  belen = (len << 8 | len >> 8);
+
+  /*
+   * Output the length then data to STDOUT
+   */
+  fwrite(&belen, 2, 1, stdout);
+  fwrite(CompBuffer, 1, len, stdout);
+  fflush(stdout);
+
+  /*
+   * Reset the Compressed Buffer
+   */
+  memset(CompBuffer, 0, 0xFFFF);
+  CompBufferPtr = CompBuffer;
+}
+
 
 
 /*
@@ -713,28 +824,27 @@ main(int  argc,				/* I - Number of command-line arguments */
 {
   int           			fd;		  /* File descriptor */
   cups_raster_t		    *ras;		/* Raster stream for printing */
-  cups_page_header_t	header;	/* Page header from file */
+  cups_page_header2_t	header;	/* Page header from file */
   int                 y;      /* Current line */
   ppd_file_t          *ppd;   /* PPD file */
   int                 num_options;	/* Number of options */
   cups_option_t       *options;	/* Options */
 
 
- /*
-  * Make sure status messages are not buffered...
-  */
+  /*
+   * Make sure status messages are not buffered...
+   */
   setbuf(stderr, NULL);
 
- /*
-  * Check command-line...
-  */
+  /*
+   * Check command-line...
+   */
   if (argc < 6 || argc > 7)
   {
-   /*
-    * We don't have the correct number of arguments; write an error message
-    * and return.
-    */
-
+    /*
+     * We don't have the correct number of arguments; write an error message
+     * and return.
+     */
     fputs("ERROR: rastertotec job-id user title copies options [file]\n", stderr);
     return (1);
   }
@@ -766,65 +876,59 @@ main(int  argc,				/* I - Number of command-line arguments */
     ppdMarkDefaults(ppd);
     cupsMarkOptions(ppd, num_options, options);
   }
+  else
+  {
+    fputs("ERROR: Missing PPD file required for defaults!", stderr);
+    return(1);
+  }
 
- /*
-  * Initialize the print device...
-  */
+  /*
+   * Initialize the print device...
+   */
   Setup(ppd);
 
- /*
-  * Process pages as needed...
-  */
-
-  Page      = 0;
+  /*
+   * Process pages as needed...
+   */
+  Page     = 0;
   Canceled = 0;
 
-  while (cupsRasterReadHeader(ras, &header))
+  while (cupsRasterReadHeader2(ras, &header))
   {
-   /*
-    * Write a status message with the page number and number of copies.
-    */
-
-    Page ++;
-
+    /*
+     * Write a status message with the page number and number of copies.
+     */
+    Page++;
     fprintf(stderr, "PAGE: %d 1\n", Page);
 
-   /*
-    * Start the page...
-    */
-
+    /*
+     * Start the page...
+     */
     StartPage(ppd, &header);
 
-   /*
-    * Loop for each line on the page...
-    */
-
-    for (y = 0; y < header.cupsHeight && !Canceled; y ++)
+    /*
+     * Loop for each line on the page...
+     */
+    for (y = 0; y < header.cupsHeight && !Canceled; y++)
     {
-     /*
-      * Let the user know how far we have progressed...
-      */
+      /*
+       * Let the user know how far we have progressed...
+       */
       if ((y & 15) == 0)
         fprintf(stderr, "INFO: Printing page %d, %d%% complete...\n", Page,
 	        100 * y / header.cupsHeight);
 
-     /*
-      * Read a line of graphics...
-      */
+      /*
+       * Read a line of graphics...
+       */
       if (cupsRasterReadPixels(ras, Buffer, header.cupsBytesPerLine) < 1)
         break;
 
-     /*
-      * Write it to the printer...
-      */
+      /*
+       * Write it to the printer...
+       */
       OutputLine(ppd, &header, y);
     }
-
-   /*
-    * Close sending graphics if Tec
-    */
-    if (ModelNumber == TEC_TPCL2)
-      printf("|}\n");
 
     /*
      * Eject the page...
@@ -834,22 +938,22 @@ main(int  argc,				/* I - Number of command-line arguments */
       break;
   }
 
- /*
-  * Close the raster stream...
-  */
+  /*
+   * Close the raster stream...
+   */
   cupsRasterClose(ras);
   if (fd != 0)
     close(fd);
 
- /*
-  * Close the PPD file and free the options...
-  */
+  /*
+   * Close the PPD file and free the options...
+   */
   ppdClose(ppd);
   cupsFreeOptions(num_options, options);
 
- /*
-  * If no pages were printed, send an error message...
-  */
+  /*
+   * If no pages were printed, send an error message...
+   */
   if (Page == 0)
     fputs("ERROR: No pages found!\n", stderr);
   else
