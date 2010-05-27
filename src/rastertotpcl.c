@@ -72,6 +72,7 @@ static unsigned char	*Buffer;		     /* Output buffer */
 static unsigned char	*LastBuffer;		 /* Last buffer */
 static unsigned char  *CompBuffer;     /* Byte array of whole image */
 unsigned char         *CompBufferPtr;  /* Pointer to current position in CompBuffer */
+int   CompLastLine;   /* Last line number sent to TOPIX output */
 int   Page,           /* Current page */
       Feed,           /* Number of lines to skip */
       Canceled,		    /* Non-zero if job is canceled */
@@ -89,8 +90,7 @@ void CancelJob(int sig);
 void OutputLine(ppd_file_t *ppd, cups_page_header2_t *header, int y);
 
 void TOPIXCompress(ppd_file_t *ppd, cups_page_header2_t *header, int y);
-void TOPIXCompressOutputBuffer();
-
+void TOPIXCompressOutputBuffer(ppd_file_t *ppd, cups_page_header2_t *header, int y);
 
 /*
  * 'Setup()' - Prepare the printer for printing.
@@ -379,7 +379,6 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   printf("{C|}\n"); 	/* clear image buffer */
 
   /* Get graphics mode from ppd file for graphics drawing */
-  int height = header->cupsHeight;
   choice = ppdFindMarkedChoice(ppd,"teGraphicsMode");
   switch (atoi(choice->choice)) {
     case 3:
@@ -391,19 +390,26 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
     case 1:
     default:
       Gmode = TEC_GMODE_TOPIX;
-      height = 300; // Overwrite height field, set to 300dpi as per TOPIX spec
   }
-  printf("{SG;0000,0000,%04d,%04d,%d,", header->cupsBytesPerLine * 8, height, Gmode);
-  
-  /*
-   * Allocate buffers for 8 dots per byte graphics ready for TOPIX compression
-   */
-  LastBuffer = malloc(header->cupsBytesPerLine);
-  memset(LastBuffer, 0, header->cupsBytesPerLine);
-  // Allocate big chunk of memory for parts of TOPIX image 
-  CompBuffer = malloc(0xFFFF);
-  memset(CompBuffer, 0, 0xFFFF);
-  CompBufferPtr = CompBuffer;
+
+  // Only print the graphics if NOT in TOPIX mode!
+  if (Gmode != TEC_GMODE_TOPIX)
+  {
+    printf("{SG;0000,0000,%04d,%04d,%d,", header->cupsBytesPerLine * 8, header->cupsHeight, Gmode);
+  }
+  else
+  {
+    /*
+     * Allocate buffers for 8 dots per byte graphics ready for TOPIX compression
+     */
+    LastBuffer = malloc(header->cupsBytesPerLine);
+    memset(LastBuffer, 0, header->cupsBytesPerLine);
+    // Allocate big chunk of memory for parts of TOPIX image 
+    CompBuffer = malloc(0xFFFF);
+    memset(CompBuffer, 0, 0xFFFF);
+    CompBufferPtr = CompBuffer;
+    CompLastLine = 0;
+  }
 
   /*
    * Allocate memory for a line of graphics...
@@ -451,11 +457,13 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
 	strcpy(Tspeed,"3\0");
 
   /*
-   * Terminate sending graphics
+   * Terminate sending graphics.
+   * If not in TOPIX mode, we also need to close the raw graphics output.
    */
   if (Gmode == TEC_GMODE_TOPIX)
-    TOPIXCompressOutputBuffer();
-  printf("|}\n");
+    TOPIXCompressOutputBuffer(ppd, header, 0);
+  else
+    printf("|}\n");
 
 
   if (Canceled)
@@ -614,8 +622,10 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
   /*
    * Free memory...
    */
-  free(LastBuffer);
-  free(CompBuffer);
+  if (Gmode == TEC_GMODE_TOPIX) {
+    free(LastBuffer);
+    free(CompBuffer);
+  }
   free(Buffer);
 }
 
@@ -682,9 +692,11 @@ TOPIXCompress(ppd_file_t         *ppd,	    /* I - PPD file */
   /*
    * Ensure that we will not overrun the buffer by sending 
    * to stdout when we get to the danger zone (width + ((width / 8) * 3))
+   * This will create multiple graphics objects depending on the size of the image.
    */
   if ((CompBufferPtr - CompBuffer) > (0xFFFF - (width + (ceil(width / 8) * 3)))) {
-    TOPIXCompressOutputBuffer();
+    TOPIXCompressOutputBuffer(ppd, header, y);
+    memset(LastBuffer, 0, header->cupsBytesPerLine);
   }
 
   /*
@@ -745,9 +757,13 @@ TOPIXCompress(ppd_file_t         *ppd,	    /* I - PPD file */
 }
 
 /*
- * 'TOPIXCompressOutputBuffer()' - Send a set of data to output
+ * 'TOPIXCompressOutputBuffer()' - Send a set of data to output.
+ *
+ * Set y to 0 if this is the last line.
  */
-void TOPIXCompressOutputBuffer()
+void TOPIXCompressOutputBuffer(ppd_file_t          *ppd,	   /* PPD file */
+                               cups_page_header2_t *header,	 /* Page header */
+                               int                 y)        /* Line number */
 {
   unsigned short len;
   unsigned short belen; /* Big-endian short! */
@@ -756,17 +772,21 @@ void TOPIXCompressOutputBuffer()
   if (len == 0)
     return;
 
-  fprintf(stderr, "DEBUG: Sending output with length: %d \n", len);
+  fprintf(stderr, "DEBUG: Sending output with length: %04x \n", len);
 
   // Convert into Big Endian (This may be OS dependant!)
   belen = (len << 8 | len >> 8);
 
   /*
-   * Output the length then data to STDOUT
+   * Output the complete graphics line to STDOUT
    */
-  fwrite(&belen, 2, 1, stdout);
-  fwrite(CompBuffer, 1, len, stdout);
+  printf("{SG;0000,%04dD,%04d,%04d,%d,", CompLastLine, header->cupsBytesPerLine * 8, 300, Gmode);
+  fwrite(&belen, 2, 1, stdout);       // Length of data
+  fwrite(CompBuffer, 1, len, stdout); // Data
+  printf("|}\n");
   fflush(stdout);
+
+  if (y) CompLastLine = y;
 
   /*
    * Reset the Compressed Buffer

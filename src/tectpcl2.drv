@@ -315,7 +315,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
 
     // Toshiba B-SX6 printer
     {
-      ModelName "BSX6"
+      ModelName "B-SX6"
       PCFileName "tecbsx6.ppd"
       VariablePaperSize Yes
       MinSize 238 29
