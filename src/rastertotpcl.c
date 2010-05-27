@@ -1,29 +1,30 @@
 /*
- * "$Id: rastertotec.c 6236 2007-02-05 21:04:04Z mike $"
- *
  *   Toshiba TEC Label printer filter for the Common UNIX Printing System (CUPS).
  *
- *   Original version by Patrick Kong, 2009-2010.
- * 
  *   Copyright 2001-2007 by Easy Software Products.
+ *   Copyright 2009 by Patrick Kong
+ *   Copyright 2010 by Sam Lown
  *
- *   These coded instructions, statements, and computer programs are the
- *   property of Easy Software Products and are protected by Federal
- *   copyright law.  Distribution and use rights are outlined in the file
- *   "LICENSE.txt" which should have been included with this file.  If this
- *   file is missing or damaged please contact Easy Software Products
- *   at:
+ *   Based on Source from CUPS printing system and rastertolabel filter.
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *       Attn: CUPS Licensing Information
- *       Easy Software Products
- *       44141 Airport View Drive, Suite 204
- *       Hollywood, Maryland 20636 USA
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *       Voice: (301) 373-9600
- *       EMail: cups-info@cups.org
- *         WWW: http://www.cups.org
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *   This file is subject to the Apple OS-Developed Software exception.
+ * Authors:
+ *
+ *  Structure based on CUPS rastertolabel by Easy Software Products, 2007.
+ *  Base version by Patrick Kong, 2009-07-21
+ *  TOPIX Compression added by Sam Lown, 2010-05-24
  *
  * Contents:
  *
@@ -31,17 +32,18 @@
  *   StartPage()    - Start a page of graphics.
  *   EndPage()      - Finish a page of graphics.
  *   CancelJob()    - Cancel the current job...
- *   OutputLine()   - Output a line of graphics. modification P.kong 21/07/2009 for tec printers
- *   TPCLCompress() - Output a run-length compression sequence for TEC printers.
+ *   OutputLine()   - Output a line of graphics.
  *   main()         - Main entry and processing of driver.
- */
-
-/*
- * Include necessary headers...
+ *
+ *   TOPIXCompress() - Compress output into TEC's TOPIX format.
+ *   TOPIXCompressOutputBuffer() - Send current contents of TOPIX data to stdout.
+ *
+ * This driver should support all Toshiba TEC Label Printers with support for TPCL (TEC
+ * Printer Command Language) and TOPIX Compression for graphics. 
+ *
  */
 
 #include <cups/cups.h>
-// #include <cups/string.h>
 #include <cups/raster.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -51,21 +53,16 @@
 
 
 /*
- * This driver filter currently supports Toshiba TEC Label Printers
- *
- * The basic code layout is the same as that in the CUPS rastertolabel.
- */
-
-/*
  * Model number constants...
  */
-
-#define TEC_TPCL2	0x14		/* Toshiba Tec TPCL2 based printers */
 #define INTSIZE		20 			/* MAXIMUM CHARACTERS INTEGER */
 
-#define TEC_GMODE_TOPIX 3    /* Toshiba Tec Graphics Modes */
+/*
+ * TEC Graphics Modes
+ */
+#define TEC_GMODE_TOPIX   3
 #define TEC_GMODE_HEX_AND 1
-#define TEC_GMODE_HEX_OR 5
+#define TEC_GMODE_HEX_OR  5
 
 
 /*
@@ -75,35 +72,30 @@ static unsigned char	*Buffer;		     /* Output buffer */
 static unsigned char	*LastBuffer;		 /* Last buffer */
 static unsigned char  *CompBuffer;     /* Byte array of whole image */
 unsigned char         *CompBufferPtr;  /* Pointer to current position in CompBuffer */
-int		LastSet;        /* Number of repeat characters */
-int		ModelNumber,		/* cupsModelNumber attribute */
-      Page,           /* Current page */
+int   Page,           /* Current page */
       Feed,           /* Number of lines to skip */
-      Canceled;		    /* Non-zero if job is canceled */
-char	Xsprint[25];		/* Final command for tec print string 2009 p.kong*/
-int 	Gmode; 			    /* Tec Graphics mode */
+      Canceled,		    /* Non-zero if job is canceled */
+      Gmode; 			    /* Tec Graphics mode */
+
+int		ModelNumber; 		/* cupsModelNumber attribute (not currently in use) */
 
 /*
  * Prototypes...
  */
-void	Setup(ppd_file_t *ppd);
-void	StartPage(ppd_file_t *ppd, cups_page_header2_t *header);
-void	EndPage(ppd_file_t *ppd, cups_page_header2_t *header);
-void	CancelJob(int sig);
-void	OutputLine(ppd_file_t *ppd, cups_page_header2_t *header, int y);
+void Setup(ppd_file_t *ppd);
+void StartPage(ppd_file_t *ppd, cups_page_header2_t *header);
+void EndPage(ppd_file_t *ppd, cups_page_header2_t *header);
+void CancelJob(int sig);
+void OutputLine(ppd_file_t *ppd, cups_page_header2_t *header, int y);
 
-void	TOPIXCompress(ppd_file_t *ppd, cups_page_header2_t *header, int y);
-void  TOPIXCompressOutputBuffer();
-
-void	TPCLCompress(char repeat_char, int repeat_count);
+void TOPIXCompress(ppd_file_t *ppd, cups_page_header2_t *header, int y);
+void TOPIXCompressOutputBuffer();
 
 
 /*
  * 'Setup()' - Prepare the printer for printing.
  */
-
-void
-Setup(ppd_file_t *ppd)			/* I - PPD file */
+void Setup(ppd_file_t *ppd)			/* I - PPD file */
 {
   char		*Fadjm;			/* Fine adjust printing position */
   char		*Radj;			/* Ribbon adjust parameter */
@@ -113,96 +105,85 @@ Setup(ppd_file_t *ppd)			/* I - PPD file */
   Radj  = (char *) malloc(INTSIZE +2); /* Ribbon ajust parameter */
 
   /*
-   * Get the model number from the PPD file...
+   * Get the model number from the PPD file.
+   * This is not yet used for anything.
    */
-  if (ppd)
-    ModelNumber = ppd->model_number;
-  else
-    fputs("WARNING: Unable to determine model number\n", stderr);
+  ModelNumber = ppd->model_number;
   
   /*
-   * Initialize based on the model number...
+   * Always send a reset command. Helps with reliability on failed jobs.
    */
+  puts("{WS|}");
 
-  switch (ModelNumber)
+  /*  
+   * Modification to take in consideration feed ajust reverse feed etc
+   */
+  strcpy(Fadjm,"{AX;"); /* Place command start */
+  /* feed adjust */
+  choice = ppdFindMarkedChoice(ppd, "FAdjSgn");
+  switch (atoi(choice->choice))
   {
-    case TEC_TPCL2 :
-
-      // Send Reset
-      puts("{WS|}");
-
-      /*  
-       * Modification to take in consideration feed ajust reverse feed etc
-       */
-      strcpy(Fadjm,"{AX;"); /* Place command start */
-      /* feed adjust */
-      choice = ppdFindMarkedChoice(ppd, "FAdjSgn");
-    	switch (atoi(choice->choice))
-    	{
-      	case 0 :
-        	strcat(Fadjm,"+");
-        	break;
-       	case 1 :
-        	strcat(Fadjm,"-");
-        	break;
-      	default :
-        	strcat(Fadjm,"+");
-        	break;
-     	}
-      choice = ppdFindMarkedChoice(ppd, "FAdjV");
-    	strcat(Fadjm,choice->choice);
-      
-      /* Cut adjust peel adjust */
-      choice = ppdFindMarkedChoice(ppd, "CAdjSgn");
-    	switch (atoi(choice->choice))
-      {
-        case 0 :
-          strcat(Fadjm,",+");
-        	break;
-      	case 1 :
-        	strcat(Fadjm,",-");
-        	break;
-      	default :
-        	strcat(Fadjm,",+");
-        	break;
-      }
-      choice = ppdFindMarkedChoice(ppd, "CAdjV");
-      strcat(Fadjm,choice->choice);
-
-      /* back feed adjust */
-      choice = ppdFindMarkedChoice(ppd, "RAdjSgn");
-	    switch (atoi(choice->choice))
-    	{
-       	case 0 :
-         	strcat(Fadjm,",+");
-        	break;
-      	case 1 :
-        	strcat(Fadjm,",-");
-        	break;
-       	default :
-        	strcat(Fadjm,",+");
-        	break;
-     	}
-
-    	choice = ppdFindMarkedChoice(ppd, "RAdjV");
-	    strcat(Fadjm,choice->choice);
-      
-      /* close the command */
-	    strcat(Fadjm,"|}");
-      /* send the command */
-    	puts(Fadjm); /*send advanced parameters */
-
-      /* Send ribbon Motor setup parameters */
-	    strcpy(Radj,"{RM;");	/* start command for ribbon */
-    	choice = ppdFindMarkedChoice(ppd, "RbnAdjFwd");
-    	strcat(Radj,choice->choice); /* value for take up motor */
-    	choice = ppdFindMarkedChoice(ppd, "RbnAdjBck");
-    	strcat(Radj,choice->choice);
-    	strcat(Radj,"|}");
-    	puts(Radj);
+    case 0 :
+      strcat(Fadjm,"+");
       break;
+    case 1 :
+      strcat(Fadjm,"-");
+      break;
+    default :
+      strcat(Fadjm,"+");
+      break;
+  }
+  choice = ppdFindMarkedChoice(ppd, "FAdjV");
+  strcat(Fadjm,choice->choice);
+  
+  /* Cut adjust peel adjust */
+  choice = ppdFindMarkedChoice(ppd, "CAdjSgn");
+  switch (atoi(choice->choice))
+  {
+    case 0 :
+      strcat(Fadjm,",+");
+      break;
+    case 1 :
+      strcat(Fadjm,",-");
+      break;
+    default :
+      strcat(Fadjm,",+");
+      break;
+  }
+  choice = ppdFindMarkedChoice(ppd, "CAdjV");
+  strcat(Fadjm,choice->choice);
 
-  } // Switch ModelNumber
+  /* back feed adjust */
+  choice = ppdFindMarkedChoice(ppd, "RAdjSgn");
+  switch (atoi(choice->choice))
+  {
+    case 0 :
+      strcat(Fadjm,",+");
+      break;
+    case 1 :
+      strcat(Fadjm,",-");
+      break;
+    default :
+      strcat(Fadjm,",+");
+      break;
+  }
+
+  choice = ppdFindMarkedChoice(ppd, "RAdjV");
+  strcat(Fadjm,choice->choice);
+  
+  /* close the command */
+  strcat(Fadjm,"|}");
+  /* send the command */
+  puts(Fadjm); /*send advanced parameters */
+
+  /* Send ribbon Motor setup parameters */
+  strcpy(Radj,"{RM;");	/* start command for ribbon */
+  choice = ppdFindMarkedChoice(ppd, "RbnAdjFwd");
+  strcat(Radj,choice->choice); /* value for take up motor */
+  choice = ppdFindMarkedChoice(ppd, "RbnAdjBck");
+  strcat(Radj,choice->choice);
+  strcat(Radj,"|}");
+  puts(Radj);
 
 }
 
@@ -230,7 +211,6 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   /*
    * Show page device dictionary...
    */
-
   fprintf(stderr, "DEBUG: StartPage...\n");
   fprintf(stderr, "DEBUG: MediaClass = \"%s\"\n", header->MediaClass);
   fprintf(stderr, "DEBUG: MediaColor = \"%s\"\n", header->MediaColor);
@@ -279,7 +259,6 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
    * Register a signal handler to eject the current page if the
    * job is canceled.
    */
-
 #ifdef HAVE_SIGSET /* Use System V signals over POSIX to avoid bugs */
   sigset(SIGTERM, CancelJob);
 #elif defined(HAVE_SIGACTION)
@@ -292,143 +271,139 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   signal(SIGTERM, CancelJob);
 #endif /* HAVE_SIGSET */
 
-  switch (ModelNumber)
-  { 
-    case TEC_TPCL2  :
-      // printf("{XJ;Page Start|}");
-      
-    	/*
-       * First paper size Dxxxx,xxxx,xxxx
-       * 
-       *   100 == 10.0mm
-       */
+  // printf("{XJ;Page Start|}");
+  
+  /*
+   * First paper size Dxxxx,xxxx,xxxx
+   * 
+   *   100 == 10.0mm
+   */
 
-      /* Get labelgap for printing */
-      choice = ppdFindMarkedChoice(ppd, "Gap");
-      labelgap = atoi(choice->choice) * 10;
+  /* Get labelgap for printing */
+  choice = ppdFindMarkedChoice(ppd, "Gap");
+  labelgap = atoi(choice->choice) * 10;
 
-      /* Calculate page widths and heights */
-      length = (int) (header->cupsPageSize[1] * 254/72);
-      labelpitch = length + labelgap;
-      width = (int) (header->cupsPageSize[0] * 254/72);
+  /* Calculate page widths and heights */
+  length = (int) (header->cupsPageSize[1] * 254/72);
+  labelpitch = length + labelgap;
+  width = (int) (header->cupsPageSize[0] * 254/72);
 
-      /* Send label size, assume gap is same all the way round */
-      printf("{D%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
+  /* Send label size, assume gap is same all the way round */
+  printf("{D%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
 
-      /*
-       * Place the right command in the parameter AY temperature fine adjust
-       */
-      switch (header->cupsCompression)
-      {
-        case 1 :
-          strcpy(Fadjt,"{AY;-10,");
-        	break;
-        case 2 :
-          strcpy(Fadjt,"{AY;-09,");
-          break;
-        case 3 :
-          strcpy(Fadjt,"{AY;-08,");
-          break;
-        case 4 :
-          strcpy(Fadjt,"{AY;-07,");
-          break;
-        case 5 :
-          strcpy(Fadjt,"{AY;-06,");
-          break;
-        case 6 :
-          strcpy(Fadjt,"{AY;-05,");
-          break;
-        case 7 :
-          strcpy(Fadjt,"{AY;-04,");
-          break;
-        case 8 :
-          strcpy(Fadjt,"{AY;-03,");
-          break;
-        case 9 :
-          strcpy(Fadjt,"{AY;-02,");
-          break;
-        case 10 :
-          strcpy(Fadjt,"{AY;-01,");
-          break;
-        case 11 :
-	        strcpy(Fadjt,"{AY;+00,");
-          break;
-        case 12 :
-          strcpy(Fadjt,"{AY;+01,");
-          break;
-        case 13 :
-          strcpy(Fadjt,"{AY;+02,");
-          break;
-        case 14 :
-          strcpy(Fadjt,"{AY;+03,");
-          break;
-        case 15 :
-          strcpy(Fadjt,"{AY;+04,");
-          break;
-        case 16 :
-          strcpy(Fadjt,"{AY;+05,");
-	        break;
-        case 17 :
-          strcpy(Fadjt,"{AY;+06,");
-	        break;
-        case 18 :
-          strcpy(Fadjt,"{AY;+07,");
-          break;
-        case 19 :
-          strcpy(Fadjt,"{AY;+08,");
-          break;
-        case 20 :
-          strcpy(Fadjt,"{AY;+09,");
-          break;
-        case 21 :
-          strcpy(Fadjt,"{AY;+10,");
-          break;
-      }
-      
-      /*
-       * Completing fine adjust according to Thermal or direct printing
-       */
-      if (!strcmp(header->MediaType, "Thermal"))
-        strcat(Fadjt,"1|}");
-      else if (!strcmp(header->MediaType, "Direct"))
-        strcat(Fadjt,"0|}");
-      
-      /*
-       * Send parameter to printer
-       */
-      puts(Fadjt);
-
-      //printf("{T|}\n");   /* Feed one sheet of paper */
-	    printf("{C|}\n"); 	/* clear image buffer */
-
-      /* Get graphics mode from ppd file for graphics drawing */
-      int height = header->cupsHeight;
-      choice = ppdFindMarkedChoice(ppd,"teGraphicsMode");
-      switch (atoi(choice->choice)) {
-        case 3:
-          Gmode = TEC_GMODE_HEX_OR; // OR drawing hex mode
-          break;
-        case 2:
-          Gmode = TEC_GMODE_HEX_AND; // AND drawing hex mode
-          break;
-        case 1:
-        default:
-          Gmode = TEC_GMODE_TOPIX;
-          height = 300; // Overwrite height field
-      }
-      printf("{SG;0000,0000,%04d,%04d,%d,", header->cupsBytesPerLine * 8, height, Gmode);
-      
-      /*
-       * Allocate buffers for 8 dots per byte graphics ready for TOPIX compression
-       */
-      LastBuffer = malloc(header->cupsBytesPerLine);
-      memset(LastBuffer, 0, header->cupsBytesPerLine);
-      // Allocate big chunk of memory for parts of TOPIX image 
-      CompBuffer = malloc(0xFFFF);
-      memset(CompBuffer, 0, 0xFFFF);
-      CompBufferPtr = CompBuffer;
-	    break;
+  /*
+   * Place the right command in the parameter AY temperature fine adjust
+   * Uses number from PPD less 11.
+   */
+  switch (header->cupsCompression)
+  {
+    case 1 :
+      strcpy(Fadjt,"{AY;-10,");
+      break;
+    case 2 :
+      strcpy(Fadjt,"{AY;-09,");
+      break;
+    case 3 :
+      strcpy(Fadjt,"{AY;-08,");
+      break;
+    case 4 :
+      strcpy(Fadjt,"{AY;-07,");
+      break;
+    case 5 :
+      strcpy(Fadjt,"{AY;-06,");
+      break;
+    case 6 :
+      strcpy(Fadjt,"{AY;-05,");
+      break;
+    case 7 :
+      strcpy(Fadjt,"{AY;-04,");
+      break;
+    case 8 :
+      strcpy(Fadjt,"{AY;-03,");
+      break;
+    case 9 :
+      strcpy(Fadjt,"{AY;-02,");
+      break;
+    case 10 :
+      strcpy(Fadjt,"{AY;-01,");
+      break;
+    case 11 :
+      strcpy(Fadjt,"{AY;+00,");
+      break;
+    case 12 :
+      strcpy(Fadjt,"{AY;+01,");
+      break;
+    case 13 :
+      strcpy(Fadjt,"{AY;+02,");
+      break;
+    case 14 :
+      strcpy(Fadjt,"{AY;+03,");
+      break;
+    case 15 :
+      strcpy(Fadjt,"{AY;+04,");
+      break;
+    case 16 :
+      strcpy(Fadjt,"{AY;+05,");
+      break;
+    case 17 :
+      strcpy(Fadjt,"{AY;+06,");
+      break;
+    case 18 :
+      strcpy(Fadjt,"{AY;+07,");
+      break;
+    case 19 :
+      strcpy(Fadjt,"{AY;+08,");
+      break;
+    case 20 :
+      strcpy(Fadjt,"{AY;+09,");
+      break;
+    case 21 :
+      strcpy(Fadjt,"{AY;+10,");
+      break;
   }
+  
+  /*
+   * Completing fine adjust according to Thermal or direct printing
+   */
+  if (strcmp(header->MediaType, "Direct"))
+    strcat(Fadjt,"1|}");
+  else // Thermal transfer mode, with or without ribbon saving
+    strcat(Fadjt,"0|}");
+  
+  /*
+   * Send parameter to printer
+   */
+  puts(Fadjt);
+
+  //printf("{T|}\n");   /* Feed one sheet of paper */
+  printf("{C|}\n"); 	/* clear image buffer */
+
+  /* Get graphics mode from ppd file for graphics drawing */
+  int height = header->cupsHeight;
+  choice = ppdFindMarkedChoice(ppd,"teGraphicsMode");
+  switch (atoi(choice->choice)) {
+    case 3:
+      Gmode = TEC_GMODE_HEX_OR; // OR drawing hex mode
+      break;
+    case 2:
+      Gmode = TEC_GMODE_HEX_AND; // AND drawing hex mode
+      break;
+    case 1:
+    default:
+      Gmode = TEC_GMODE_TOPIX;
+      height = 300; // Overwrite height field, set to 300dpi as per TOPIX spec
+  }
+  printf("{SG;0000,0000,%04d,%04d,%d,", header->cupsBytesPerLine * 8, height, Gmode);
+  
+  /*
+   * Allocate buffers for 8 dots per byte graphics ready for TOPIX compression
+   */
+  LastBuffer = malloc(header->cupsBytesPerLine);
+  memset(LastBuffer, 0, header->cupsBytesPerLine);
+  // Allocate big chunk of memory for parts of TOPIX image 
+  CompBuffer = malloc(0xFFFF);
+  memset(CompBuffer, 0, 0xFFFF);
+  CompBufferPtr = CompBuffer;
 
   /*
    * Allocate memory for a line of graphics...
@@ -474,156 +449,148 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
 	tstat =0;
 	strcpy(Tmode,"C\0");
 	strcpy(Tspeed,"3\0");
-  switch (ModelNumber)
-  {    
-      case TEC_TPCL2  :
-        /*
-         * Terminate sending graphics
-         */
-        if (Gmode == TEC_GMODE_TOPIX)
-          TOPIXCompressOutputBuffer();
-        printf("|}\n");
+
+  /*
+   * Terminate sending graphics
+   */
+  if (Gmode == TEC_GMODE_TOPIX)
+    TOPIXCompressOutputBuffer();
+  printf("|}\n");
 
 
-        if (Canceled)
+  if (Canceled)
+  {
+    /*
+     * Ramclear in case of error
+     */
+    puts("{WR|}");
+
+  } else {
+
+    /*
+     * Set media tracking...
+     */
+    if (ppdIsMarked(ppd, "teMediaTracking", "0"))
+      detect = 0;
+    else if (ppdIsMarked(ppd, "teMediaTracking", "1"))
+      detect = 1;
+    else if (ppdIsMarked(ppd, "teMediaTracking", "2"))
+      detect = 2;
+    else if (ppdIsMarked(ppd, "teMediaTracking", "3"))
+      detect= 3;
+    else if (ppdIsMarked(ppd, "teMediaTracking", "4"))
+      detect = 4;
+
+    //	printf("{XJ;End Page %d|}",detect);
+    /*
+     * Set print mode...
+     */
+    if (header->CutMedia) /* coupe active */
+    {	
+      strcpy(Tmode,"C\0");
+      CutActive =1;
+    }
+    else
+    {
+      if ((choice = ppdFindMarkedChoice(ppd, "tePrintMode")) != NULL &&
+        strcmp(choice->choice, "0"))
+      {
+        strcpy(Tmode,"C\0");
+        if (!strcmp(choice->choice,"1"))
+          strcpy(Tmode,"D\0");
+        else if (!strcmp(choice->choice, "2"))
+          strcpy(Tmode,"E\0");
+        else if (!strcmp(choice->choice, "3"))
         {
-	        /*
-           * Ramclear in case of error
-           */
-          puts("{WR|}");
-          break;
-        }
-
-        /*
-         * Set media tracking...
-         */
-        if (ppdIsMarked(ppd, "teMediaTracking", "0"))
-          detect = 0;
-        else if (ppdIsMarked(ppd, "teMediaTracking", "1"))
-          detect = 1;
-        else if (ppdIsMarked(ppd, "teMediaTracking", "2"))
-          detect = 2;
-        else if (ppdIsMarked(ppd, "teMediaTracking", "3"))
-          detect= 3;
-        else if (ppdIsMarked(ppd, "teMediaTracking", "4"))
-          detect = 4;
-
-        //	printf("{XJ;End Page %d|}",detect);
-      	/*
-         * Set print mode...
-         */
-        if (header->CutMedia) /* coupe active */
-        {	
           strcpy(Tmode,"C\0");
           CutActive =1;
         }
-        else
-        {
-          if ((choice = ppdFindMarkedChoice(ppd, "tePrintMode")) != NULL &&
-            strcmp(choice->choice, "0"))
-        	{
-            strcpy(Tmode,"C\0");
-            if (!strcmp(choice->choice,"1"))
-              strcpy(Tmode,"D\0");
-            else if (!strcmp(choice->choice, "2"))
-              strcpy(Tmode,"E\0");
-            else if (!strcmp(choice->choice, "3"))
-            {
-              strcpy(Tmode,"C\0");
-              CutActive =1;
-            }
-          }
-        }
-        /*
-         * Set print rate...
-         */
-        choice = ppdFindMarkedChoice(ppd, "tePrintRate");
-	
-        /* The speed is selected from the printer parameter choice */
-        switch (atoi(choice->choice))
-        {
-          case 2 :
-            strcpy(Tspeed,"2\0");
-            break;
-          case 3 :
-            strcpy(Tspeed,"3\0");
-            break;
-          case 4 :
-            strcpy(Tspeed,"4\0");
-            break;
-          case 5 :
-            strcpy(Tspeed,"5\0");
-            break;
-          case 6 :
-            strcpy(Tspeed,"6\0");
-            break;
-          case 8 :
-            strcpy(Tspeed,"8\0");
-            break;
-          case 10 :
-            strcpy(Tspeed,"A\0");
-            break;
-	      }
-	      
-       /*
-        * Set media type...
-        */
-       if (!strcmp(header->MediaType, "Thermal"))
-         Tmedia = 2;
-       else if (!strcmp(header->MediaType, "Direct"))
-         Tmedia = 0;
-       else if (!strcmp(header->MediaType,"Thermal2"))
-         Tmedia = 1;
-       else if (strcmp(header->MediaType,"Direct2"))
-         Tmedia = 3;
-       
-       /* status response */
-	    tstat = 0;
-      
-      /*
-       * Manage the cut option every label or end of batch print 
-       */
-      switch (header->cupsRowStep)
-      {
-        case 0 :
-          Tcut =0;
-          break;
-        case 1 :
-          Tcut =1;
-          break;
-        case 999 :
-          Tcut =0;
-          break;
-        default:
-          Tcut= 0;
-          break;
       }
+    }
+    /*
+     * Set print rate...
+     */
+    choice = ppdFindMarkedChoice(ppd, "tePrintRate");
 
-      /*
-       * Version 1.2 Mirror option not managed local management
-       */ 
-      if ((choice = ppdFindMarkedChoice(ppd, "PrintOrient")) != NULL)
-        Tmirror = atoi(choice->choice);
-      else
-        Tmirror = 0;
+    /* The speed is selected from the printer parameter choice */
+    switch (atoi(choice->choice))
+    {
+      case 2 :
+        strcpy(Tspeed,"2\0");
+        break;
+      case 3 :
+        strcpy(Tspeed,"3\0");
+        break;
+      case 4 :
+        strcpy(Tspeed,"4\0");
+        break;
+      case 5 :
+        strcpy(Tspeed,"5\0");
+        break;
+      case 6 :
+        strcpy(Tspeed,"6\0");
+        break;
+      case 8 :
+        strcpy(Tspeed,"8\0");
+        break;
+      case 10 :
+        strcpy(Tspeed,"A\0");
+        break;
+    }
+    
+    /*
+     * Set with or without ribbon mode from media type 
+     */
+    if (!strcmp(header->MediaType, "Direct"))
+      Tmedia = 0;
+    else if (!strcmp(header->MediaType, "Thermal"))
+      Tmedia = 1;
+    else if (!strcmp(header->MediaType,"Thermal2"))
+      Tmedia = 2;
+   
+    /* status response */
+    tstat = 0;
 
-      /*
-       * End the label and eject...
-       */
-      // printf("{PV00;0010,%4d,0020,0020,A,00,B=----Hello Linux World From S.K.E----- |}\n",header->PageSize[1]*254/72 - 50);
-      // printf("{PC01;0010,%4d,05,05,O,00,B= Only Man gives names and value to things (P.Kong)|}\n",header->PageSize[1]*254/72 - 30);
-      printf("{XS;I,%04d,%03d%d%s%s%d%d%d|}\n",header->NumCopies,Tcut,detect,Tmode,Tspeed,Tmedia,Tmirror,tstat);
-      
-      /* Send eject command if cut active */
-      if (CutActive > 0)
-        printf("{IB|}\n");
+    /*
+     * Manage the cut option every label or end of batch print 
+     */
+    switch (header->cupsRowStep)
+    {
+      case 0 :
+        Tcut =0;
+        break;
+      case 1 :
+        Tcut =1;
+        break;
+      case 999 :
+        Tcut =0;
+        break;
+      default:
+        Tcut= 0;
+        break;
+    }
 
-      /* 
-       * send print command 
-       * Free compression buffers...
-       */
+    /*
+     * Version 1.2 Mirror option not managed local management
+     */ 
+    if ((choice = ppdFindMarkedChoice(ppd, "PrintOrient")) != NULL)
+      Tmirror = atoi(choice->choice);
+    else
+      Tmirror = 0;
 
-  } // end switch ModelNumber
+    /*
+     * End the label and eject...
+     */
+    // printf("{PV00;0010,%4d,0020,0020,A,00,B=----Hello Linux World From S.K.E----- |}\n",header->PageSize[1]*254/72 - 50);
+    // printf("{PC01;0010,%4d,05,05,O,00,B= Only Man gives names and value to things (P.Kong)|}\n",header->PageSize[1]*254/72 - 30);
+    printf("{XS;I,%04d,%03d%d%s%s%d%d%d|}\n",header->NumCopies,Tcut,detect,Tmode,Tspeed,Tmedia,Tmirror,tstat);
+    
+    /* Send eject command if cut active */
+    if (CutActive > 0)
+      printf("{IB|}\n");
+
+  } // Not Cancelled
+
 
   fflush(stdout);
 
@@ -674,22 +641,18 @@ CancelJob(int sig)			/* I - Signal */
  * Empty lines can often be skipped if the buffer is checked.
  */
 void
-OutputLine(ppd_file_t         *ppd,	/* I - PPD file */
-           cups_page_header2_t *header,	/* I - Page header */
-           int                y)	/* I - Line number */
+OutputLine(ppd_file_t           *ppd,	    /* I - PPD file */
+           cups_page_header2_t  *header,	/* I - Page header */
+           int                  y)	      /* I - Line number */
 {
 
-  switch (ModelNumber)
-  {
-    case TEC_TPCL2 :
-      if (Gmode == TEC_GMODE_TOPIX) {
-        TOPIXCompress(ppd, header, y);
-      } else {
-        // Hex Output
-        fwrite(Buffer, 1, header->cupsBytesPerLine, stdout);
-      }
-      break;
-  } // switch ModelNumber
+  if (Gmode == TEC_GMODE_TOPIX) {
+    TOPIXCompress(ppd, header, y);
+  } else {
+    // Hex Output
+    fwrite(Buffer, 1, header->cupsBytesPerLine, stdout);
+  }
+
 }
 
 
@@ -961,7 +924,3 @@ main(int  argc,				/* I - Number of command-line arguments */
   return (Page == 0);
 }
 
-
-/*
- * End of "$Id: rastertotec.c 6236 2007-02-05 21:04:04Z mike $".
- */
