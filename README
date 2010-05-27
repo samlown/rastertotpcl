@@ -41,7 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 Converted original restertotec file into rastertotpcl.
 Added support for TOPIX compression.
-Refactoring of code for simplicity.
+Now using CUPS raster header 2 for finer control of page sizes.
+Refactoring.
 
 == Supported Printers
 
@@ -75,6 +76,10 @@ The easiest way to install from source is to run the following from the base dir
 This will install the filter and PPD files in the standard CUPS filter and PPD directories
 and show them in the CUPS printer selection screens.
 
+
+== TODO
+
+* Add support for RFID.
 
 == Authors
 

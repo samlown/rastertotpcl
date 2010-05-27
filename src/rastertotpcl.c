@@ -1,5 +1,5 @@
 /*
- *   Toshiba TEC Label printer filter for the Common UNIX Printing System (CUPS).
+ *   Toshiba TEC TPCL Label printer filter for the Common UNIX Printing System (CUPS).
  *
  *   Copyright 2001-2007 by Easy Software Products.
  *   Copyright 2009 by Patrick Kong
