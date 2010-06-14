@@ -68,6 +68,10 @@ the drivers on other printers with success.
 
 == Instalation
 
+The CUPS image development headers are required before compilation. In Ubuntu, these can be installed with:
+
+    sudo apt-get install libcupsimage2-dev
+
 The easiest way to install from source is to run the following from the base directory:
 
     make
