@@ -284,8 +284,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
       MaxSize 295 4246
       Group "General/General"
         Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          *Resolution k 1 0 0 0 "203dpi/203 DPI"
-          Resolution k 1 0 0 0 "306dpi/306 DPI"
+          *Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
 
       Group "PrinterSettings/Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
@@ -304,8 +303,8 @@ Group "AdvancedSetting/Advanced Printer Settings"
       MaxSize 362 4246
       Group "General/General"
         Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          Resolution k 1 0 0 0 "203dpi/203 DPI"
-          *Resolution k 1 0 0 0 "306dpi/306 DPI"
+          Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
+          *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
       Group "PrinterSettings/Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
           Choice "3/76 mm/sec." ""      
@@ -330,8 +329,8 @@ Group "AdvancedSetting/Advanced Printer Settings"
       HWMargins 0 0 0 0
       Group "General/General"
         Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          Resolution k 1 0 0 0 "203dpi/203 DPI"
-          *Resolution k 1 0 0 0 "305dpi/305 DPI"
+          Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
+          *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
       Group "PrinterSettings/Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
           Choice "3/76 mm/sec." ""
@@ -364,8 +363,8 @@ Group "AdvancedSetting/Advanced Printer Settings"
       MediaSize w576h468
       Group "General/General"
         Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          Resolution k 1 0 0 0 "203dpi/203 DPI"
-          *Resolution k 1 0 0 0 "305dpi/305 DPI"
+          Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
+          *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
       Group "PrinterSettings/Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
           Choice "3/76 mm/sec." ""
@@ -384,7 +383,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
     MaxSize 614 1814
     Group "General/General"
       Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-        *Resolution k 1 0 0 0 "300dpi/300 DPI"
+        *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
     Group "PrinterSettings/Printer Settings"
       Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
         Choice "2/50.8 mm/sec." ""
@@ -410,7 +409,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
       MaxSize 306 1726
       Group "General/General"
         Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          *Resolution k 1 0 0 0 "203dpi/203 DPI"
+          *Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
       Group "General/General"
         Option "MediaType/Media Type" PickOne AnySetup 20.0
           *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
@@ -424,7 +423,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
       MaxSize 306 1726
       Group "General/General"
         Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          *Resolution k 1 0 0 0 "203dpi/203 DPI"
+          *Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
       Group "General/General"
         Option "MediaType/Media Type" PickOne AnySetup 20.0
           Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
