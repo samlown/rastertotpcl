@@ -105,27 +105,27 @@ MediaSize w288h936
 
 
 Group "General/General"
-  Option "Gap/Label Gap" PickOne AnySetup 20.0
+  Option "Gap/Label Gap" PickOne AnySetup 20
     Choice "0/0 mm " ""
     Choice "1/1 mm " ""
     *Choice "2/2 mm " ""
     Choice "3/3 mm " ""
     Choice "4/4 mm " ""
     Choice "5/5 mm " ""
-  Option "teMediaTracking/Media Detection" PickOne AnySetup 20.0
+  Option "teMediaTracking/Media Detection" PickOne AnySetup 20
     Choice "0/Continous" ""
     Choice "1/Reflective" ""
     *Choice "2/Transmissive" ""
     Choice "3/Reflective Pre-Print" ""
     Choice "4/Transmissive Pre-Print" ""
-  Option "PrintOrient/Orientation" PickOne Anysetup 20.0
+  Option "PrintOrient/Orientation" PickOne Anysetup 20
     *Choice "0/Bottom Leading" ""
     Choice "1/Top Leading" ""
     Choice "2/Mirror Print Top Leading" ""
     Choice "3/Mirror Print Bottom Leading" ""
 
 Group "PrinterSettings/Printer Settings"
-  Option "Darkness/Temperature" PickOne AnySetup 20.0
+  Option "Darkness/Temperature" PickOne AnySetup 20
     Choice "1/-10" "<</cupsCompression 1>>setpagedevice"
     Choice "2/-9" "<</cupsCompression 2>setpagedevice"
     Choice "3/-8" "<</cupsCompression 3>>setpagedevice"
@@ -147,26 +147,26 @@ Group "PrinterSettings/Printer Settings"
     Choice "19/+8" "<</cupsCompression 19>>setpagedevice"
     Choice "20/+9" "<</cupsCompression 20>>setpagedevice"
     Choice "21/+10" "<</cupsCompression 21>>setpagedevice"
-  Option "tePrintMode/Print Mode" PickOne AnySetup 20.0
+  Option "tePrintMode/Print Mode" PickOne AnySetup 20
     *Choice "0/Batch" ""
     Choice "1/Peel Off Cell Active" ""
     Choice "2/Peel Off Cell Not Active" ""
     Choice "3/Cutter" ""
-  Option "teCutter/Cutter Option" PickOne AnySetup 20.0
+  Option "teCutter/Cutter Option" PickOne AnySetup 20
     *Choice "0/No Cut" "<</cupsRowStep 0>>setpagedevice"
     Choice "1/Cut Every Label" "<</cupsRowStep 1>>setpagedevice"
     Choice "2/Cut Every 2 Labels " "<</cupsRowStep 999>>setpagedevice"
 
 
 Group "AdvancedSetting/Advanced Printer Settings"
-  Option "teGraphicsMode/Graphics Mode" PickOne AnySetup 20.0
+  Option "teGraphicsMode/Graphics Mode" PickOne AnySetup 20
     *Choice "1/TOPIX Compression" ""
     Choice "2/Raw 8bit Graphics (overwrite)" ""
     Choice "3/Raw 8bit Graphics (logic OR)" ""
-  Option "FAdjSgn/Feed Direction" PickOne AnySetup 20.0
+  Option "FAdjSgn/Feed Direction" PickOne AnySetup 20
     *Choice "0/+" ""
      Choice "1/-" ""
-  Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20.0
+  Option "FAdjV/Feed Adjust Value" PickOne AnySetup 20
     *Choice "000/0.0 mm" ""
     Choice "010/1.0 mm" ""
     Choice "020/2.0 mm" ""
@@ -178,10 +178,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
     Choice "080/8.0 mm" ""
     Choice "090/9.0 mm" ""
     Choice "100/10.0 mm" ""
-  Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20.0
+  Option "CAdjSgn/Cut or Peel Adjust Direction" PickOne AnySetup 20
     *Choice "0/+" ""
     Choice "1/-" ""
-  Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20.0
+  Option "CAdjV/Cut or Peel Adjust Value" PickOne AnySetup 20
     *Choice "000/0.0 mm" ""
     Choice "010/1.0 mm" ""
     Choice "020/2.0 mm" ""
@@ -193,10 +193,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
     Choice "080/8.0 mm" ""
     Choice "090/9.0 mm" ""
     Choice "100/10.0 mm" ""
-  Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20.0
+  Option "RAdjSgn/Back Feed Direction" PickOne AnySetup 20
     *Choice "0/+" ""
      Choice "1/-" ""
-  Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20.0
+  Option "RAdjV/Back Feed Adjust Value" PickOne AnySetup 20
     *Choice "00/0.0 mm" ""
     Choice "10/1.0 mm" ""
     Choice "20/2.0 mm" ""
@@ -208,7 +208,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
     Choice "80/8.0 mm" ""
     Choice "90/9.0 mm" ""
     Choice "99/9.9 mm" ""
-  Option "RbnAdjFwd/Ribbon Forward Adjust" PickOne AnySetup 20.0
+  Option "RbnAdjFwd/Ribbon Forward Adjust" PickOne AnySetup 20
     *Choice "-00/0" ""
     Choice "-01/-1" ""
     Choice "-02/-2" ""
@@ -225,7 +225,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
     Choice "-13/-13" ""
     Choice "-14/-14" ""
     Choice "-15/-15" ""
-  Option "RbnAdjBck/Ribbon Back Adjust" PickOne AnySetup 20.0
+  Option "RbnAdjBck/Ribbon Back Adjust" PickOne AnySetup 20
     *Choice "-00/0" ""
     Choice "-01/-1" ""
     Choice "-02/-2" ""
@@ -253,15 +253,15 @@ Group "AdvancedSetting/Advanced Printer Settings"
     VariablePaperSize Yes
     MinSize 63 29
     MaxSize 300 2830
+    *Resolution k 1 0 0 0 "203dpi/TECBSA4G"
+    Resolution k 1 0 0 0 "300dpi/TECBSA4T"
+
     Group "General/General"
-      Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-        *Choice "203dpi/TECBSA4G" "<</HWResolution[203 203]>>setpagedevice"
-        Choice "300dpi/TECBSA4T" "<</HWResolution[300 300]>>setpagedevice"
-      Option "MediaType/Media Type" PickOne AnySetup 20.0
+      Option "MediaType/Media Type" PickOne AnySetup 20
         *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
         Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
     Group "PrinterSettings/Printer Settings"
-      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50 mm/sec." ""
         *Choice "4/101 mm/sec." ""
         Choice "6/152 mm/sec." ""  
@@ -270,7 +270,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
   // TEC B-SX Range
   {
     Group "General/General"
-      Option "MediaType/Media Type" PickOne AnySetup 20.0
+      Option "MediaType/Media Type" PickOne AnySetup 20
         *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
         Choice "Thermal/Thermal Transfer with ribbon saving" "<</MediaType(Thermal)>>Setpagedevice"
         Choice "Thermal2/Thermal Transfer without ribbon saving" "<</MediaType(Thermal2)>>setpagedevice"
@@ -282,12 +282,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
       VariablePaperSize Yes
       MinSize 72 23
       MaxSize 295 4246
-      Group "General/General"
-        Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          *Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
+      *Resolution k 1 0 0 0 "203dpi/203 DPI"
 
       Group "PrinterSettings/Printer Settings"
-        Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Option "tePrintRate/Print Speed" PickOne AnySetup 20
           Choice "3/76 mm/sec." ""
           *Choice "6/152 mm/sec." ""
           Choice "10/254 mm/sec." ""  
@@ -301,12 +299,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
       VariablePaperSize Yes
       MinSize 73 29
       MaxSize 362 4246
-      Group "General/General"
-        Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
-          *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
+      Resolution k 1 0 0 0 "203dpi/203 DPI"
+      *Resolution k 1 0 0 0 "300dpi/300 DPI"
       Group "PrinterSettings/Printer Settings"
-        Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Option "tePrintRate/Print Speed" PickOne AnySetup 20
           Choice "3/76 mm/sec." ""      
            *Choice "5/127 mm/sec." ""
           Choice "8/203 mm/sec." ""  
@@ -327,12 +323,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
       MediaSize w432h432
       MediaSize w432h468
       HWMargins 0 0 0 0
-      Group "General/General"
-        Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
-          *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
+      Resolution k 1 0 0 0 "203dpi/203 DPI"
+      *Resolution k 1 0 0 0 "300dpi/300 DPI"
       Group "PrinterSettings/Printer Settings"
-        Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Option "tePrintRate/Print Speed" PickOne AnySetup 20
           Choice "3/76 mm/sec." ""
           *Choice "4/101 mm/sec." ""
           Choice "8/203 mm/sec." ""  
@@ -361,12 +355,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
       MediaSize w576h360
       MediaSize w576h432
       MediaSize w576h468
-      Group "General/General"
-        Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
-          *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
+      Resolution k 1 0 0 0 "203dpi/203 DPI"
+      *Resolution k 1 0 0 0 "300dpi/300 DPI"
       Group "PrinterSettings/Printer Settings"
-        Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+        Option "tePrintRate/Print Speed" PickOne AnySetup 20
           Choice "3/76 mm/sec." ""
           *Choice "4/101 mm/sec." ""
           Choice "8/203 mm/sec." ""  
@@ -381,11 +373,9 @@ Group "AdvancedSetting/Advanced Printer Settings"
     VariablePaperSize Yes
     MinSize 283 35
     MaxSize 614 1814
-    Group "General/General"
-      Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-        *Choice "300dpi/300 DPI" "<</HWResolution[300 300]>>setpagedevice"
+    *Resolution k 1 0 0 0 "300dpi/300 DPI"
     Group "PrinterSettings/Printer Settings"
-      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50.8 mm/sec." ""
         *Choice "4/101 mm/sec." ""
         Choice "8/203 mm/sec." ""  
@@ -395,7 +385,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
   {
 
     Group "PrinterSettings/Printer Settings"
-      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50 mm/sec." ""
         *Choice "3/76.2 mm/sec." ""
         Choice "4/101.6 mm/sec." ""  
@@ -407,11 +397,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
       VariablePaperSize Yes
       MinSize 71 23
       MaxSize 306 1726
+      *Resolution k 1 0 0 0 "203dpi/203 DPI"
+
       Group "General/General"
-        Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          *Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
-      Group "General/General"
-        Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Option "MediaType/Media Type" PickOne AnySetup 20
           *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
 
     }
@@ -421,11 +410,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
       VariablePaperSize Yes
       MinSize 71 23
       MaxSize 306 1726
+      *Resolution k 1 0 0 0 "203dpi/203 DPI"
+
       Group "General/General"
-        Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-          *Choice "203dpi/203 DPI" "<</HWResolution[203 203]>>setpagedevice"
-      Group "General/General"
-        Option "MediaType/Media Type" PickOne AnySetup 20.0
+        Option "MediaType/Media Type" PickOne AnySetup 20
           Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
           *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
     }
@@ -434,7 +422,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
   // TECBEV4T-GS14 
   {  
     Group "PrinterSettings/Printer Settings"
-      Option "tePrintRate/Print Speed" PickOne AnySetup 20.0
+      Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50 mm/sec." ""
         *Choice "3/76.2 mm/sec." ""
         Choice "4/101.6 mm/sec." ""  
@@ -446,11 +434,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
        VariablePaperSize Yes
        MinSize 71 23
        MaxSize 306 1726
+       *Resolution k 1 0 0 0 "203dpi/TECBEV4GG"
+       Resolution k 1 0 0 0 "300dpi/TECBEV4TT"
        Group "General/General"
-         Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-           *Choice "203dpi/TECBEV4GG" "<</HWResolution[203 203]>>setpagedevice"
-           Choice "300dpi/TECBEV4TT" "<</HWResolution[300 300]>>setpagedevice"
-         Option "MediaType/Media Type" PickOne AnySetup 20.0
+         Option "MediaType/Media Type" PickOne AnySetup 20 
            *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
      }
      {
@@ -459,12 +446,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
         VariablePaperSize Yes
         MinSize 71 23
         MaxSize 306 1726
+        Resolution k 1 0 0 0 "203dpi/TECBEV4G"
+        *Resolution k 1 0 0 0 "300dpi/TECBEV4T"
         Group "General/General"
-          Option "Resolution/Printer Resolution" PickOne AnySetup 20.0
-            Choice "203dpi/TECBEV4G" "<</HWResolution[203 203]>>setpagedevice"
-            *Choice "300dpi/TECBEV4T" "<</HWResolution[300 300]>>setpagedevice"
-        Group "General/General"
-          Option "MediaType/Media Type" PickOne AnySetup 20.0
+          Option "MediaType/Media Type" PickOne AnySetup 20
             Choice "Thermal/Thermal Transfer" "<</MediaType(Thermal)>>setpagedevice"
             *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
       }
