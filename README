@@ -37,6 +37,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 == History
 
+=== 2010-07-10 - PPD Fixes
+
+PPDC compilation errors discovered in Ubuntu 10.10 and resolution setting
+was being ignored.
+
+
 === 2010-05-27 - Initial release
  
 Converted original restertotec file into rastertotpcl.
