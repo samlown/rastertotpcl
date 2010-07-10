@@ -1,7 +1,7 @@
 
-= RasterToTPCL CUPS Raster Driver
+# RasterToTPCL CUPS Raster Driver
 
-== Introduction
+## Introduction
 
 A driver to Toshiba TEC Label printers supporting the TEC Printer Command Language or TPCL,
 version 2.
@@ -19,7 +19,7 @@ http://github.com/samlown/rastertotpcl
 
 Any issues or code you'd like to contribute can be performed there.
 
-== License
+## License
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,22 +35,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-== History
+## History
 
-=== 2010-07-10 - PPD Fixes
+### 2010-07-10 - PPD Fixes
 
 PPDC compilation errors discovered in Ubuntu 10.10 and resolution setting
 was being ignored.
 
 
-=== 2010-05-27 - Initial release
+### 2010-05-27 - Initial release
  
 Converted original restertotec file into rastertotpcl.
 Added support for TOPIX compression.
 Now using CUPS raster header 2 for finer control of page sizes.
 Refactoring.
 
-== Supported Printers
+## Supported Printers
 
 Support for the following printers is included by the PPD files:
 
@@ -72,7 +72,7 @@ As of May 2010, thorough testing has only been performed on the B-SX4 model. Ple
 the drivers on other printers with success.
 
 
-== Instalation
+## Instalation
 
 The CUPS image development headers are required before compilation. In Ubuntu, these can be installed with:
 
@@ -87,11 +87,11 @@ This will install the filter and PPD files in the standard CUPS filter and PPD d
 and show them in the CUPS printer selection screens.
 
 
-== TODO
+## TODO
 
 * Add support for RFID.
 
-== Authors
+## Authors
 
 rastertotpcl is based on the rastertotec driver written by Patick Kong (SKE s.a.r.l).
 rastertotec is based on the rastertolabel driver included with the CUPS printing system by Easy Software Products.
