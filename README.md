@@ -1,5 +1,5 @@
 
-# RasterToTPCL CUPS Raster Driver
+# Toshiba TEC TPCL CUPS Raster Driver - rastertotpcl
 
 ## Introduction
 
