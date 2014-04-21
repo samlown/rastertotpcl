@@ -289,7 +289,8 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   width = (int) (header->cupsPageSize[0] * 254/72);
 
   /* Send label size, assume gap is same all the way round */
-  printf("{D%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
+  // printf("{D%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
+  printf("{D%04d,%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
 
   /*
    * Place the right command in the parameter AY temperature fine adjust
