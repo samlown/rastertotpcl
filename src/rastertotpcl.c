@@ -780,7 +780,7 @@ void TOPIXCompressOutputBuffer(ppd_file_t          *ppd,	   /* PPD file */
   /*
    * Output the complete graphics line to STDOUT
    */
-  printf("{SG;0000,%04dD,%04d,%04d,%d,", CompLastLine, header->cupsBytesPerLine * 8, 300, Gmode);
+  printf("{SG;0000,%04d,%04d,%04d,%d,", CompLastLine, header->cupsBytesPerLine * 8, 300, Gmode);
   fwrite(&belen, 2, 1, stdout);       // Length of data
   fwrite(CompBuffer, 1, len, stdout); // Data
   printf("|}\n");
