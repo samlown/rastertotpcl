@@ -101,6 +101,7 @@ MediaSize w288h288
 MediaSize w288h432
 MediaSize w288h468
 MediaSize w288h936
+MediaSize w284h425 
 
 
 
@@ -363,6 +364,42 @@ Group "AdvancedSetting/Advanced Printer Settings"
           *Choice "4/101 mm/sec." ""
           Choice "8/203 mm/sec." ""  
     }
+
+    // Toshiba TEC B-482 printer
+    {
+      ModelName "B-482"
+      PCFileName "tecb482.ppd"
+      HWMargins 0 0 0 0
+      VariablePaperSize Yes
+      MinSize 72 23
+      MaxSize 295 4246
+      Resolution k 1 0 0 0 "203dpi/203 DPI"
+      *Resolution k 1 0 0 0 "300dpi/300 DPI"
+
+      Group "PrinterSettings/Printer Settings"
+        Option "tePrintRate/Print Speed" PickOne AnySetup 20
+          Choice "3/76 mm/sec." ""
+          Choice "4/102 mm/sec." ""
+          *Choice "5/127 mm/sec." ""
+          Choice "8/203 mm/sec." ""  
+    }
+
+    // Toshiba TEC B-572 printer
+    {
+      ModelName "B-572"
+      PCFileName "tecb572.ppd"
+      HWMargins 0 0 0 0
+      VariablePaperSize Yes
+      MinSize 73 29
+      MaxSize 362 4246
+      Resolution k 1 0 0 0 "203dpi/203 DPI"
+      *Resolution k 1 0 0 0 "300dpi/300 DPI"
+      Group "PrinterSettings/Printer Settings"
+        Option "tePrintRate/Print Speed" PickOne AnySetup 20
+          Choice "3/76 mm/sec." ""      
+           *Choice "5/127 mm/sec." ""
+          Choice "8/203 mm/sec." ""  
+    } 
   } // End of B-SX Range
 
 

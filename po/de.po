@@ -17,7 +17,7 @@ msgid "Duplex Unit"
 msgstr "Duplexer"
 
 msgid "Optional Input Tray"
-msgstr "Optionale Behälter"
+msgstr "Optionale Zufuhr"
 
 msgid "Optional Hard Disk"
 msgstr "Optionale Festplatte"
@@ -359,7 +359,7 @@ msgid "Off"
 msgstr "Aus"
 
 msgid "Not Installed"
-msgstr "Nicht Eingebaut"
+msgstr "Nicht eingebaut"
 
 msgid "On"
 msgstr "Ein"
@@ -497,7 +497,7 @@ msgid "Plain Paper"
 msgstr "Normalpapier"
 
 msgid "Letterhead"
-msgstr "Bedruckt"
+msgstr "Briefbogen"
 
 msgid "Printer Default"
 msgstr "Druckereinstellung"
@@ -584,37 +584,37 @@ msgid "TPCL2 Impresor Etiqueta "
 msgstr "Impressor Toshiba Tec"
 
 msgid "50.80 mmx25.40 mm"
-msgstr "50.80 mmx25.40 mm"
+msgstr "50,80 mmx25,40 mm"
 
 msgid "50.80 mmx31.75 mm"
-msgstr "50.80 mmx31.75 mm"
+msgstr "50,80 mmx31,75 mm"
 
 msgid "50.80 mmx50.80 mm"
-msgstr "50.80 mmx50.80 mm"
+msgstr "50,80 mmx50,80 mm"
 
 msgid "50.80 mmx76.20 mm"
-msgstr "50.80 mmx76.20 mm"
+msgstr "50,80 mmx76,20 mm"
 
 msgid "73.66 mm x 25.40 mm"
-msgstr "73.66 mm x 25.40 mm"
+msgstr "73,66 mm x 25,40 mm"
 
 msgid "101.60 mmx50.80 mm"
-msgstr "101.60 mmx50.80 mm"
+msgstr "101,60 mmx50,80 mm"
 
 msgid "101.60 mmx76.20 mm"
-msgstr "101.60 mmx76.20 mm"
+msgstr "101,60 mmx76,20 mm"
 
 msgid "101.60 mmx101.60 mm"
-msgstr "101.60 mmx101.60 mm"
+msgstr "101,60 mmx101,60 mm"
 
 msgid "101.60 mmx127.00 mm"
-msgstr "101.60 mmx127.00 mm"
+msgstr "101,60 mmx127,00 mm"
 
 msgid "101.60 mmx150.00 mm"
-msgstr "101.60 mmx150.00 mm"
+msgstr "101,60 mmx150,00 mm"
 
 msgid "101.60 mmx152.40 mm"
-msgstr "101.60 mmx152.40 mm"
+msgstr "101,60 mmx152,40 mm"
 
 msgid "Printer Resolution"
 msgstr "Printer Definition"
@@ -671,16 +671,16 @@ msgid "Thermal Transfer"
 msgstr "ThermoTransfer"
 
 msgid "Thermal Tr. with optimiser"
-msgstr "ThermoTransfer mit opt."
+msgstr "Thermotransfer mit Optim."
 
 msgid "Direct Th. with optimiser"
-msgstr "Thermodirekdruk mit opt"
+msgstr "Thermodirekt mit Optimierung"
 
 msgid "Orientation"
-msgstr "Orientation"
+msgstr "Orientierung"
 
 msgid "Bottom Leading"
-msgstr "Bottom Leading"
+msgstr "Unterkante voraus"
 
 msgid "Top Leading"
 msgstr "Drehung um 180"
@@ -692,7 +692,7 @@ msgid "Mirror Print Bottom Leading"
 msgstr "Spiegeln"
 
 msgid "Printer Settings"
-msgstr "Printer Settings"
+msgstr "Druckereinstellungen"
 
 msgid "Temperature"
 msgstr "Temperatur"
@@ -773,16 +773,16 @@ msgid "152 mm/sec."
 msgstr "152 mm/sec."
 
 msgid "Print Mode"
-msgstr "Print Mode"
+msgstr "Druckmodus"
 
 msgid "Batch"
 msgstr "Batch"
 
 msgid "Peel off Cell Active"
-msgstr "Etikettenaßlösung Cell Active"
+msgstr "Etikettenablösung Sensor aktiv"
 
 msgid "Peel Off Cell Not Active"
-msgstr "Etikettenaßlösung Cell Not Active"
+msgstr "Etikettenablösung Sensor inaktiv"
 
 msgid "Cutter"
 msgstr "Messer"
@@ -791,7 +791,7 @@ msgid "General"
 msgstr "General parameters"
 
 msgid "Peel Off"
-msgstr "Etikettenaßlösung"
+msgstr "Etikettenablösung"
 
 msgid "Cutter Option"
 msgstr "Messer Option"
@@ -888,5 +888,5 @@ msgid "Reprint on Error"
 msgstr "Reprint on Error"
 
 msgid "Not used"
-msgstr "F.F.U"
+msgstr "Nicht verwendet"
 
