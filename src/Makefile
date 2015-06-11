@@ -1,9 +1,10 @@
 
 EXEC=rastertotpcl
-CFLAGS=-lcupsimage
+CFLAGS=`cups-config --cflags`
+LDFLAGS=`cups-config --ldflags`
 LDLIBS=`cups-config --image --libs`
-PPDPATH=/usr/share/ppd
-EXECPATH=/usr/lib/cups/filter
+PPDPATH=/usr/local/share/ppd
+EXECPATH=/usr/local/libexec/cups/filter
 
 all: rastertotpcl ppd
 
