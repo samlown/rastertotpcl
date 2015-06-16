@@ -7,11 +7,11 @@
 #include "labelmedia.h"
 
 // Language Support
-#po fr "../po/fr.po" // French
+// #po fr "../po/fr.po" // French
 // #po be "be.po"    // Belgian
-#po de "../po/de.po" // German
-#po it "../po/it.po" // Italian
-#po es "../po/es.po" // Spanish
+// #po de "../po/de.po" // German
+// #po it "../po/it.po" // Italian
+// #po es "../po/es.po" // Spanish
 
 // TECTPCL2 Label Printer
 Copyright ""
