@@ -1,10 +1,11 @@
 
 EXEC=rastertotpcl
-CFLAGS=`cups-config --cflags`
-LDFLAGS=`cups-config --ldflags`
-LDLIBS=`cups-config --image --libs`
-PPDPATH=/usr/local/share/ppd
-EXECPATH=/usr/local/libexec/cups/filter
+CFLAGS != cups-config --cflags
+LDFLAGS != cups-config --ldflags
+LDLIBS != cups-config --image --libs
+CUPSDATADIR != cups-config --datadir
+PPDPATH=${CUPSDATADIR}/model
+CUPSDIR !=cups-config --serverbin
 
 all: rastertotpcl ppd
 
@@ -16,14 +17,15 @@ ppd:
 	ppdc tectpcl2.drv
 
 install:
-	if test ! -d $(PPDPATH)/$(EXEC); then mkdir $(PPDPATH)/$(EXEC); fi
-	cp ppd/* $(PPDPATH)/$(EXEC)
-	cp $(EXEC) $(EXECPATH)/
+	install -s $(EXEC) $(CUPSDIR)/filter/
+	install -m 644 tectpcl2.drv $(CUPSDATADIR)/drv/
+	install -m 644 labelmedia.h $(CUPSDATADIR)/ppdc/
 	
 
 uninstall:
-	rm -rf $(PPDPATH)/$(EXEC)
-	rm -f $(EXECPATH)/$(EXEC)
+	rm -f $(CUPSDIR)/filter/$(EXEC)
+	rm -f $(CUPSDATADIR)/drv/tectpcl2.drv
+	rm -f $(CUPSDATADIR)/ppdc/labelmedia.h
 
 
 clean:
