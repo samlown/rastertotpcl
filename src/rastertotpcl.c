@@ -366,7 +366,7 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   /*
    * Completing fine adjust according to Thermal or direct printing
    */
-  if (strcmp(header->MediaType, "Direct"))
+  if (strcmp(header->MediaType, "Direct") == 0)
     strcat(Fadjt,"1|}");
   else // Thermal transfer mode, with or without ribbon saving
     strcat(Fadjt,"0|}");
