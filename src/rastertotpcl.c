@@ -429,6 +429,7 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
 {
   int 		      Quant;	 		/* Quantity to print */
   char		      *Temp;			/* Temporary string */
+  char		      *Dummy;			/* dummy chars workaround bev4t last tcp packet lost bug V1.1G*/
   unsigned int 	Tmedia;			/* type of media */
   char          *Tmode;			/* Print mode */
   unsigned int  Tmirror;		/* Mirror print */
@@ -444,12 +445,14 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
 #endif /* HAVE_SIGACTION && !HAVE_SIGSET */
 
   Temp = (char *) malloc(INTSIZE +2);
+  Dummy = (char *) malloc(600);
   Tmode = (char *) malloc(INTSIZE +2);
   Tspeed = (char *) malloc(INTSIZE +2);
   detect = 0;
   Quant = 1;
   CutActive =0;
 
+  memset(Dummy, 0, 600);
   /* Initialise printing defaults */
 	Tmedia =0;
 	Tmirror=0;
@@ -600,8 +603,9 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
 
   } // Not Cancelled
 
-
   fflush(stdout);
+
+  write(1, Dummy, 600);
 
   /*
    * Unregister the signal handler...
