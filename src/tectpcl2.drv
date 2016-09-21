@@ -124,6 +124,9 @@ Group "General/General"
     Choice "1/Top Leading" ""
     Choice "2/Mirror Print Top Leading" ""
     Choice "3/Mirror Print Bottom Leading" ""
+  Option "CenterOfPixel/Center Of Pixel" PickOne AnySetup 30
+    *Choice "true/true" ""
+    Choice "false/true" ""
 
 Group "PrinterSettings/Printer Settings"
   Option "Darkness/Temperature" PickOne AnySetup 20
