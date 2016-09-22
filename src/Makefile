@@ -1,8 +1,8 @@
 
 EXEC=rastertotpcl
-CFLAGS = $(shell cups-config --cflags)
-LDFLAGS = $(shell cups-config --ldflags)
-LDLIBS = $(shell cups-config --image --libs)
+CFLAGS += $(shell cups-config --cflags)
+LDFLAGS += $(shell cups-config --ldflags)
+LDLIBS += $(shell cups-config --image --libs) -lm
 CUPSDATADIR = $(shell cups-config --datadir)
 PPDPATH=${CUPSDATADIR}/model
 CUPSDIR = $(shell cups-config --serverbin)
