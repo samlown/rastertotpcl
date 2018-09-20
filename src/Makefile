@@ -1,6 +1,6 @@
 
 EXEC=rastertotpcl
-CFLAGS=-lcupsimage
+CFLAGS=-lcupsimage -lcups
 PPDPATH=/usr/share/ppd
 EXECPATH=/usr/lib/cups/filter
 
