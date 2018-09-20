@@ -44,12 +44,14 @@
  */
 
 #include <cups/cups.h>
+#include <cups/ppd.h>
 #include <cups/raster.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <math.h>
+#include <stdio.h>
 
 
 /*
