@@ -1,4 +1,3 @@
-
 // Include necessary files...
 #include <font.defs>
 #include <media.defs>
@@ -7,11 +6,11 @@
 #include "labelmedia.h"
 
 // Language Support
-// #po fr "../po/fr.po" // French
-// #po be "be.po"    // Belgian
-// #po de "../po/de.po" // German
-// #po it "../po/it.po" // Italian
-// #po es "../po/es.po" // Spanish
+#po fr "../po/fr.po" // French
+#po be "../po/be.po" // Belgian
+#po de "../po/de.po" // German
+#po it "../po/it.po" // Italian
+#po es "../po/es.po" // Spanish
 
 // TECTPCL2 Label Printer
 Copyright ""
@@ -19,6 +18,7 @@ Copyright ""
 Copyright "Copyright 2001-2006 by Easy Software Products."
 Copyright "Copyright 2009 by S.K.E sarl Patrick Kong"
 Copyright "Copyright 2010 by Sam Lown <me@samlown.com>"
+Copyright "Copyright 2020 by Mark Dornbach <dob@iteneo.de>"
 Copyright ""
 Copyright "This program is free software: you can redistribute it and/or modify"
 Copyright "it under the terms of the GNU General Public License as published by"
@@ -33,7 +33,7 @@ Copyright ""
 Copyright "You should have received a copy of the GNU General Public License"
 Copyright "along with this program.  If not, see <http://www.gnu.org/licenses/>."
 Copyright ""
-Copyright "" 
+Copyright ""
 Attribute "Product" "" "(GNU Ghostscript)"
 Attribute "Product" "" "(ESP Ghostscript)"
 Attribute "cupsVersion" "" "1.2"
@@ -101,9 +101,7 @@ MediaSize w288h288
 MediaSize w288h432
 MediaSize w288h468
 MediaSize w288h936
-MediaSize w284h425 
-
-
+MediaSize w284h425
 
 Group "General/General"
   Option "Gap/Label Gap" PickOne AnySetup 20
@@ -268,7 +266,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
       Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50 mm/sec." ""
         *Choice "4/101 mm/sec." ""
-        Choice "6/152 mm/sec." ""  
+        Choice "6/152 mm/sec." ""
   }
 
   // TEC B-SX Range
@@ -292,7 +290,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20
           Choice "3/76 mm/sec." ""
           *Choice "6/152 mm/sec." ""
-          Choice "10/254 mm/sec." ""  
+          Choice "10/254 mm/sec." ""
     }
 
     // Toshiba TEC BSX5 printer
@@ -307,9 +305,9 @@ Group "AdvancedSetting/Advanced Printer Settings"
       *Resolution k 1 0 0 0 "300dpi/300 DPI"
       Group "PrinterSettings/Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20
-          Choice "3/76 mm/sec." ""      
+          Choice "3/76 mm/sec." ""
            *Choice "5/127 mm/sec." ""
-          Choice "8/203 mm/sec." ""  
+          Choice "8/203 mm/sec." ""
     }
 
     // Toshiba B-SX6 printer
@@ -333,7 +331,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20
           Choice "3/76 mm/sec." ""
           *Choice "4/101 mm/sec." ""
-          Choice "8/203 mm/sec." ""  
+          Choice "8/203 mm/sec." ""
     }
 
     // Toshiba BSX8
@@ -365,7 +363,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20
           Choice "3/76 mm/sec." ""
           *Choice "4/101 mm/sec." ""
-          Choice "8/203 mm/sec." ""  
+          Choice "8/203 mm/sec." ""
     }
 
     // Toshiba TEC B-482 printer
@@ -384,7 +382,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
           Choice "3/76 mm/sec." ""
           Choice "4/102 mm/sec." ""
           *Choice "5/127 mm/sec." ""
-          Choice "8/203 mm/sec." ""  
+          Choice "8/203 mm/sec." ""
     }
 
     // Toshiba TEC B-572 printer
@@ -399,10 +397,10 @@ Group "AdvancedSetting/Advanced Printer Settings"
       *Resolution k 1 0 0 0 "300dpi/300 DPI"
       Group "PrinterSettings/Printer Settings"
         Option "tePrintRate/Print Speed" PickOne AnySetup 20
-          Choice "3/76 mm/sec." ""      
+          Choice "3/76 mm/sec." ""
            *Choice "5/127 mm/sec." ""
-          Choice "8/203 mm/sec." ""  
-    } 
+          Choice "8/203 mm/sec." ""
+    }
   } // End of B-SX Range
 
 
@@ -418,7 +416,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
       Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50.8 mm/sec." ""
         *Choice "4/101 mm/sec." ""
-        Choice "8/203 mm/sec." ""  
+        Choice "8/203 mm/sec." ""
   }
 
   // TEc BSV4D 203 dpi & TEC BSV4T
@@ -428,12 +426,12 @@ Group "AdvancedSetting/Advanced Printer Settings"
       Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50 mm/sec." ""
         *Choice "3/76.2 mm/sec." ""
-        Choice "4/101.6 mm/sec." ""  
-        Choice "5/127.0 mm/sec." ""  
+        Choice "4/101.6 mm/sec." ""
+        Choice "5/127.0 mm/sec." ""
 
     {
       ModelName "B-SV4D"
-      PCFileName "tecbsv4d.ppd" 
+      PCFileName "tecbsv4d.ppd"
       VariablePaperSize Yes
       MinSize 71 23
       MaxSize 306 1726
@@ -444,7 +442,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
           *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
 
     }
-    { 
+    {
       ModelName "B-SV4T"
       PCFileName "tecbsv4t.ppd"
       VariablePaperSize Yes
@@ -459,14 +457,14 @@ Group "AdvancedSetting/Advanced Printer Settings"
     }
   }
 
-  // TECBEV4T-GS14 
-  {  
+  // TECBEV4T-GS14
+  {
     Group "PrinterSettings/Printer Settings"
       Option "tePrintRate/Print Speed" PickOne AnySetup 20
         Choice "2/50 mm/sec." ""
         *Choice "3/76.2 mm/sec." ""
-        Choice "4/101.6 mm/sec." ""  
-        Choice "5/127.0 mm/sec." ""  
+        Choice "4/101.6 mm/sec." ""
+        Choice "5/127.0 mm/sec." ""
 
     {
        ModelName "B-EV4D-GS14"
@@ -477,7 +475,7 @@ Group "AdvancedSetting/Advanced Printer Settings"
        *Resolution k 1 0 0 0 "203dpi/TECBEV4GG"
        Resolution k 1 0 0 0 "300dpi/TECBEV4TT"
        Group "General/General"
-         Option "MediaType/Media Type" PickOne AnySetup 20 
+         Option "MediaType/Media Type" PickOne AnySetup 20
            *Choice "Direct/Direct Thermal" "<</MediaType(Direct)>>setpagedevice"
      }
      {

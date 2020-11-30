@@ -1,7 +1,5 @@
-
-/*                                                                                                                                                        
+/*
  *  Label Printer Media Definitions.
- *
  */
 
 // MediaSize sizes used by label drivers...
@@ -71,4 +69,4 @@
 #media "w576h360/8.00x5.00\"" 576 360
 #media "w576h432/8.00x6.00\"" 576 432
 #media "w576h468/8.00x6.50\"" 576 468
-#media "w284h425/100mmx150mm" 284 425 
+#media "w284h425/100mmx150mm" 284 425
