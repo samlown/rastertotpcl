@@ -4,9 +4,10 @@
  *   Copyright 2001-2007 by Easy Software Products.
  *   Copyright 2009 by Patrick Kong
  *   Copyright 2010 by Sam Lown
+ *   Copyright 2020 by Mark Dornbach
  *
  *   Based on Source from CUPS printing system and rastertolabel filter.
- * 
+ *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -25,6 +26,7 @@
  *  Structure based on CUPS rastertolabel by Easy Software Products, 2007.
  *  Base version by Patrick Kong, 2009-07-21
  *  TOPIX Compression added by Sam Lown, 2010-05-24
+ *  Bugfixes and modernizations by Mark Dornbach, 2020-11-30
  *
  * Contents:
  *
@@ -39,18 +41,19 @@
  *   TOPIXCompressOutputBuffer() - Send current contents of TOPIX data to stdout.
  *
  * This driver should support all Toshiba TEC Label Printers with support for TPCL (TEC
- * Printer Command Language) and TOPIX Compression for graphics. 
+ * Printer Command Language) and TOPIX Compression for graphics.
  *
  */
 
 #include <cups/cups.h>
+#include <cups/ppd.h>
 #include <cups/raster.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <math.h>
-
+#include <stdio.h>
 
 /*
  * Model number constants...
@@ -109,13 +112,13 @@ void Setup(ppd_file_t *ppd)			/* I - PPD file */
    * This is not yet used for anything.
    */
   ModelNumber = ppd->model_number;
-  
+
   /*
    * Always send a reset command. Helps with reliability on failed jobs.
    */
   puts("{WS|}");
 
-  /*  
+  /*
    * Modification to take in consideration feed ajust reverse feed etc
    */
   strcpy(Fadjm,"{AX;"); /* Place command start */
@@ -135,7 +138,7 @@ void Setup(ppd_file_t *ppd)			/* I - PPD file */
   }
   choice = ppdFindMarkedChoice(ppd, "FAdjV");
   strcat(Fadjm,choice->choice);
-  
+
   /* Cut adjust peel adjust */
   choice = ppdFindMarkedChoice(ppd, "CAdjSgn");
   switch (atoi(choice->choice))
@@ -170,7 +173,7 @@ void Setup(ppd_file_t *ppd)			/* I - PPD file */
 
   choice = ppdFindMarkedChoice(ppd, "RAdjV");
   strcat(Fadjm,choice->choice);
-  
+
   /* close the command */
   strcat(Fadjm,"|}");
   /* send the command */
@@ -201,7 +204,7 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   int         	length;			/* Effective label length */
   int 		      width;			/* Effective label width */
   char		      *Fadjt;			/* Fine adjust temperature */
-  
+
 #if defined(HAVE_SIGACTION) && !defined(HAVE_SIGSET)
   struct sigaction action;		/* Actions for POSIX signals */
 #endif /* HAVE_SIGACTION && !HAVE_SIGSET */
@@ -272,10 +275,10 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
 #endif /* HAVE_SIGSET */
 
   // printf("{XJ;Page Start|}");
-  
+
   /*
    * First paper size Dxxxx,xxxx,xxxx
-   * 
+   *
    *   100 == 10.0mm
    */
 
@@ -289,8 +292,7 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
   width = (int) (header->cupsPageSize[0] * 254/72);
 
   /* Send label size, assume gap is same all the way round */
-  // printf("{D%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
-  printf("{D%04d,%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap); 
+  printf("{D%04d,%04d,%04d,%04d|}\n",labelpitch, width, length, width + labelgap);
 
   /*
    * Place the right command in the parameter AY temperature fine adjust
@@ -362,7 +364,7 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
       strcpy(Fadjt,"{AY;+10,");
       break;
   }
-  
+
   /*
    * Completing fine adjust according to Thermal or direct printing
    */
@@ -370,7 +372,7 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
     strcat(Fadjt,"1|}");
   else // Thermal transfer mode, with or without ribbon saving
     strcat(Fadjt,"0|}");
-  
+
   /*
    * Send parameter to printer
    */
@@ -405,7 +407,7 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
      */
     LastBuffer = malloc(header->cupsBytesPerLine);
     memset(LastBuffer, 0, header->cupsBytesPerLine);
-    // Allocate big chunk of memory for parts of TOPIX image 
+    // Allocate big chunk of memory for parts of TOPIX image
     CompBuffer = malloc(0xFFFF);
     memset(CompBuffer, 0, 0xFFFF);
     CompBufferPtr = CompBuffer;
@@ -427,8 +429,6 @@ void
 EndPage(ppd_file_t *ppd,		/* I - PPD file */
         cups_page_header2_t *header)	/* I - Page header */
 {
-  int 		      Quant;	 		/* Quantity to print */
-  char		      *Temp;			/* Temporary string */
   char		      *Dummy;			/* dummy chars workaround bev4t last tcp packet lost bug V1.1G*/
   unsigned int 	Tmedia;			/* type of media */
   char          *Tmode;			/* Print mode */
@@ -444,12 +444,10 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
   struct sigaction action;		/* Actions for POSIX signals */
 #endif /* HAVE_SIGACTION && !HAVE_SIGSET */
 
-  Temp = (char *) malloc(INTSIZE +2);
   Dummy = (char *) malloc(600);
   Tmode = (char *) malloc(INTSIZE +2);
   Tspeed = (char *) malloc(INTSIZE +2);
   detect = 0;
-  Quant = 1;
   CutActive =0;
 
   memset(Dummy, 0, 600);
@@ -498,7 +496,7 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
      * Set print mode...
      */
     if (header->CutMedia) /* coupe active */
-    {	
+    {
       strcpy(Tmode,"C\0");
       CutActive =1;
     }
@@ -549,9 +547,9 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
         strcpy(Tspeed,"A\0");
         break;
     }
-    
+
     /*
-     * Set with or without ribbon mode from media type 
+     * Set with or without ribbon mode from media type
      */
     if (!strcmp(header->MediaType, "Direct"))
       Tmedia = 0;
@@ -559,12 +557,12 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
       Tmedia = 1;
     else if (!strcmp(header->MediaType,"Thermal2"))
       Tmedia = 2;
-   
+
     /* status response */
     tstat = 0;
 
     /*
-     * Manage the cut option every label or end of batch print 
+     * Manage the cut option every label or end of batch print
      */
     switch (header->cupsRowStep)
     {
@@ -584,7 +582,7 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
 
     /*
      * Version 1.2 Mirror option not managed local management
-     */ 
+     */
     if ((choice = ppdFindMarkedChoice(ppd, "PrintOrient")) != NULL)
       Tmirror = atoi(choice->choice);
     else
@@ -596,7 +594,7 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
     // printf("{PV00;0010,%4d,0020,0020,A,00,B=----Hello Linux World From S.K.E----- |}\n",header->PageSize[1]*254/72 - 50);
     // printf("{PC01;0010,%4d,05,05,O,00,B= Only Man gives names and value to things (P.Kong)|}\n",header->PageSize[1]*254/72 - 30);
     printf("{XS;I,%04d,%03d%d%s%s%d%d%d|}\n",header->NumCopies,Tcut,detect,Tmode,Tspeed,Tmedia,Tmirror,tstat);
-    
+
     /* Send eject command if cut active */
     if (CutActive > 0)
       printf("{IB|}\n");
@@ -651,7 +649,7 @@ CancelJob(int sig)			/* I - Signal */
 
 /*
  * 'OutputLine()' - Output a line of graphics.
- * 
+ *
  * Some versions of this method check to see if the Buffer has data, this doesn't.
  * Empty lines can often be skipped if the buffer is checked.
  */
@@ -683,19 +681,19 @@ TOPIXCompress(ppd_file_t         *ppd,	    /* I - PPD file */
   int               i;              /* Index into Buffer */
   int               max;            /* Max number of items per line */
   unsigned char     line[8][9][9] = {0};  /* Current line */
-  int               l1, l2, l3;     /* Current Positions in line */ 
+  int               l1, l2, l3;     /* Current Positions in line */
   unsigned char     cl1, cl2, cl3;  /* Current Characters */
 
   int               width;          /* Max width of the line */
   unsigned char     xor;      /* Current XORed character */
   unsigned char     *ptr;     /* Pointer into the Compressed Line Buffer */
- 
+
 
   width = header->cupsBytesPerLine;
   max = 8 * 9 * 9;
 
   /*
-   * Ensure that we will not overrun the buffer by sending 
+   * Ensure that we will not overrun the buffer by sending
    * to stdout when we get to the danger zone (width + ((width / 8) * 3))
    * This will create multiple graphics objects depending on the size of the image.
    */
@@ -754,7 +752,7 @@ TOPIXCompress(ppd_file_t         *ppd,	    /* I - PPD file */
       ptr++;
     }
   }
-  
+
   /*
    * Copy line into last buffer ready for next loop
    */
@@ -948,4 +946,3 @@ main(int  argc,				/* I - Number of command-line arguments */
     fputs("INFO: Ready to print.\n", stderr);
   return (Page == 0);
 }
-
