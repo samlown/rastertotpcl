@@ -1,4 +1,3 @@
-
 # Toshiba TEC TPCL CUPS Raster Driver - rastertotpcl
 
 ## Introduction
@@ -13,42 +12,15 @@ Conversion includes support for the TPCL TOPIX compression algorithm for reliabl
 delivery of print jobs to the printer. Raw 8-bit graphics direct from the raster driver
 are also supported but not recommended.
 
-This document and source for the driver can be found at:
+This repository is a fork with some minor improvements, so the driver will compile on recent
+systems. It was tested on MacOS Big Sur and Debian Buster. The original source can be found
+at [samlown/rastertotpcl](http://github.com/samlown/rastertotpcl).
 
-http://github.com/samlown/rastertotpcl
+Pull requests to this project are very welcome, as the original repository seems to be
+no longer maintained.
 
-Any issues or code you'd like to contribute can be performed there.
-
-## License
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-## History
-
-### 2010-07-10 - PPD Fixes
-
-PPDC compilation errors discovered in Ubuntu 10.10 and resolution setting
-was being ignored.
-
-
-### 2010-05-27 - Initial release
- 
-Converted original restertotec file into rastertotpcl.
-Added support for TOPIX compression.
-Now using CUPS raster header 2 for finer control of page sizes.
-Refactoring.
+Eventually, this project should move to [PAPPL](https://github.com/michaelrsweet/pappl/),
+as CUPS printer drivers are deprecated.
 
 ## Supported Printers
 
@@ -68,32 +40,61 @@ Support for the following printers is included by the PPD files:
 There is little variation between these printers other than resolutions, speeds, and accepted media types,
 so new printer models can be tested or added easily.
 
-As of May 2010, thorough testing has only been performed on the B-SX4 model. Please get in touch if you test
-the drivers on other printers with success.
+Thorough testing has been performed on the B-SX4 model by the original authors. This fork was validated
+against a B-EV4D model. Please get in touch if you test the drivers on other printers with success, or run
+into problems.
 
+## Installation
 
-## Instalation
+### Linux prerequisites
 
-The CUPS image development headers are required before compilation. In Ubuntu, these can be installed with:
+The CUPS development headers and ppd compiler are required before compilation. On Debian or Ubuntu, these can
+be installed with:
 
-    sudo apt-get install libcupsimage2-dev
+```
+sudo apt-get install build-essential libcups2-dev cups-ppdc
+```
+
+### MacOS prerequisites
+
+Download XCode and install it.
+
+### Install (both Linux and MacOS)
 
 The easiest way to install from source is to run the following from the base directory:
 
-    make
-    sudo make install
+```
+make
+sudo make install
+```
 
 This will install the filter and PPD files in the standard CUPS filter and PPD directories
 and show them in the CUPS printer selection screens.
 
+To remove driver and all its components, run
 
-## TODO
+```
+sudo make uninstall
+```
 
-* Add support for RFID.
+## License
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Authors
-
 rastertotpcl is based on the rastertotec driver written by Patick Kong (SKE s.a.r.l).
 rastertotec is based on the rastertolabel driver included with the CUPS printing system by Easy Software Products.
 Packaing of rastertotpcl and TOPIX compression was added by Sam Lown (www.samlown.com).
-
+Original MacOS adaption by [Milverton](https://milverton.typepad.com/the-hairy-mouse/2011/10/print-to-toshiba-tec-b-ev4d-gs14-on-os-x.html).
+This fork is maintained by Mark Dornbach (yaourdt).
