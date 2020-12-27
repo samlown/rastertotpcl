@@ -19,6 +19,9 @@ at [samlown/rastertotpcl](http://github.com/samlown/rastertotpcl).
 Pull requests to this project are very welcome, as the original repository seems to be
 no longer maintained.
 
+Eventually, this project should move to [PAPPL](https://github.com/michaelrsweet/pappl/),
+as CUPS printer drivers are deprecated.
+
 ## Supported Printers
 
 Support for the following printers is included by the PPD files:
@@ -42,12 +45,21 @@ against a B-EV4D model. Please get in touch if you test the drivers on other pri
 into problems.
 
 ## Installation
-The CUPS development headers and ppd compiler are required before compilation. In Debian/Ubuntu, these can
+
+### Linux prerequisites
+
+The CUPS development headers and ppd compiler are required before compilation. On Debian or Ubuntu, these can
 be installed with:
 
 ```
 sudo apt-get install build-essential libcups2-dev cups-ppdc
 ```
+
+### MacOS prerequisites
+
+Download XCode and install it.
+
+### Install (both Linux and MacOS)
 
 The easiest way to install from source is to run the following from the base directory:
 
@@ -59,7 +71,7 @@ sudo make install
 This will install the filter and PPD files in the standard CUPS filter and PPD directories
 and show them in the CUPS printer selection screens.
 
-To remove driver and ll its components, run
+To remove driver and all its components, run
 
 ```
 sudo make uninstall
@@ -84,4 +96,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 rastertotpcl is based on the rastertotec driver written by Patick Kong (SKE s.a.r.l).
 rastertotec is based on the rastertolabel driver included with the CUPS printing system by Easy Software Products.
 Packaing of rastertotpcl and TOPIX compression was added by Sam Lown (www.samlown.com).
+Original MacOS adaption by [Milverton](https://milverton.typepad.com/the-hairy-mouse/2011/10/print-to-toshiba-tec-b-ev4d-gs14-on-os-x.html).
 This fork is maintained by Mark Dornbach (yaourdt).
