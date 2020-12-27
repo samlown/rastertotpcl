@@ -599,6 +599,10 @@ EndPage(ppd_file_t *ppd,		/* I - PPD file */
     if (CutActive > 0)
       printf("{IB|}\n");
 
+      // To avoid Zerowindow Error at the end of the stream
+      // https://github.com/icrebollo/rastertotpcl/commit/46704d69a4ebd2dcfe1d98136c683dc7bfb7e7b4
+      printf("%1024s","");
+
   } // Not Cancelled
 
   fflush(stdout);
