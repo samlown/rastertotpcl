@@ -102,6 +102,7 @@ MediaSize w288h432
 MediaSize w288h468
 MediaSize w288h936
 MediaSize w284h425
+MediaSize w292h564
 
 Group "General/General"
   Option "Gap/Label Gap" PickOne AnySetup 20
